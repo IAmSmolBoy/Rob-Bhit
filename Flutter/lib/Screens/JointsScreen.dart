@@ -1,0 +1,154 @@
+import 'package:flutter/material.dart';
+import 'package:rob_bhit/Screens/SettingsScreen.dart';
+import 'package:rob_bhit/Widgets/AppBar.dart';
+import 'package:rob_bhit/utils/helper.dart';
+
+import '../utils/navigation.dart';
+
+class JointsScreen extends StatefulWidget {
+  const JointsScreen({ super.key });
+
+  @override
+  State<JointsScreen> createState() => _JointsScreenState();
+}
+
+class _JointsScreenState extends State<JointsScreen> {
+
+  @override
+  Widget build(BuildContext context) {
+
+    final Size screenSize = MediaQuery.of(context).size;
+    TextStyle textStyle = const TextStyle(
+      fontSize: 24,
+      color: Colors.black
+    );
+
+    Widget jointText(String title, String val) => Padding(
+      padding: EdgeInsets.only(
+        top: screenSize.height / 100
+      ),
+      child: RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: "$title: ",
+              style: textStyle,
+            ),
+            TextSpan(
+              text: val,
+              style: textStyle.copyWith(
+                color: Theme.of(context).colorScheme.primary
+              ),
+            ),
+            TextSpan(
+              text: " °",
+              style: textStyle,
+            )
+          ]
+        ),
+      ) 
+    );
+
+    return StreamBuilder(
+      stream: getCobotData(),
+      builder: (BuildContext context, AsyncSnapshot<Map<String, double>> snapshot) {
+
+        if (snapshot.hasError) {
+          print(snapshot.error);
+        }
+
+        if (snapshot.hasData) {
+
+          print(snapshot.data);
+
+          List<Widget> widgetList =
+            snapshot
+              .data!
+              .entries
+              .map(
+                (entry) => jointText(
+                  entry.key,
+                  entry.value.toStringAsFixed(1)
+                )
+              )
+              .toList();
+
+          return Scaffold(
+            appBar: MainAppBar(
+              title: "Joints",
+              settings: () {
+                slideDownTo(
+                  context: context,
+                  screen: const SettingsScreen()
+                );
+              },
+            ),
+            body: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenSize.width / 10
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: screenSize.height / 50
+                        ),
+                        child: const Text(
+                          "6 Axis Cobot",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenSize.width / 10,
+                      vertical: screenSize.height / 50
+                    ),
+                    child: Image.asset("images/Cobot Image.png")
+                  ),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Joint Data",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30
+                        ),
+                      ),
+                    ]
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: screenSize.height / 50
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: widgetList,
+                        ),
+                      ],
+                    ) 
+                  )
+                ]
+              ),
+            ),
+          );
+        }
+        
+        return const Center(child: CircularProgressIndicator(),);
+      }
+    );
+
+  }
+
+}
