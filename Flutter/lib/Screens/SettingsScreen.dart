@@ -26,9 +26,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  // Future<Map<String, dynamic>> getData() async {
+  //   Response response = await get(
+  //     Uri(
+  //       scheme: "http",
+  //       host: dotenv.env['SERVERIP'],
+  //       port: 5000,
+  //       path: "/current/cobot"
+  //     )
+  //   );
+    
+  //   return json.decode(response.body);
+  // }
+
   @override
   Widget build(BuildContext context) {
 
+    // return FutureBuilder(
+    //   future: getData(),
+    //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+    //     if (snapshot.connectionState != ConnectionState.done) {
+    //       // Return what ur user sees when loading
+    //       return const Center(child: CircularProgressIndicator());
+    //     }
+    //     else if (snapshot.hasError) {
+    //       // Return what ur user sees when an error occurs
+    //       return Center(child: Text("Something went wrong. ${snapshot.error}"));
+    //     }
+    //     else if (snapshot.hasData) {
+    //       // Return ur screen
+    //       return Screen();
+    //     }
+    //     else {
+    //       return Container();
+    //     }
+    //   }
+    // );
+    
     return Scaffold(
       appBar: const MainAppBar(
         title: "Settings"

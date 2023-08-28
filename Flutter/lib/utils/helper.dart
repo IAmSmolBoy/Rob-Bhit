@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 
 String? emailValidator(String? value) {
@@ -58,10 +59,7 @@ Stream<Map<String, double>> getCobotData() async* {
     Response response = await get(
       Uri(
         scheme: "http",
-        host: "192.168.250.100",
-        // host: "192.168.109.2",
-        // host: "10.0.2.2",
-        // host: "10.252.1.247",
+        host: dotenv.env['SERVERIP'],
         port: 5000,
         path: "/current/cobot"
       )

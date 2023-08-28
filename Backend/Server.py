@@ -1,6 +1,6 @@
 # Dependencies
-import os
-from flask import Flask, request, jsonify
+from multiprocessing import Pipe, Process
+from flask import Flask, request
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -22,11 +22,15 @@ from helper import *
 # Connections
 from connections import IPAddr
 
+# Variables
+jointData = {}
 
 
 
 
 
+
+getJoint = lambda : jointData
 
 app = Flask(__name__)
 
@@ -62,18 +66,19 @@ def register():
     users.insert_one(userCredentials)
     return { "message": "User registered sucessfully" }
 
-@app.route('/cnc', methods=['GET'])
-def cnc():
+# @app.route('/cnc', methods=['GET'])
+# def cnc():
 
-    data = HaasCNCData.find({}, { '_id': False })
+#     data = HaasCNCData.find({}, { '_id': False })
     
-    if data == None:
-        return { "error": "CNC data not found" }
+#     if data == None:
+#         return { "error": "CNC data not found" }
 
-    return list(data)
+#     return list(data)
 
 @app.route('/current/<machine>', methods=['GET'])
 def current(machine):
+    global jointData
 
     match machine:
         case "cnc":
@@ -89,9 +94,23 @@ def current(machine):
             return data
         
         case "cobot":
-            return get_modbus_data()
+            print(getJoint())
+            return getJoint()
+
+def extractData():
+    global jointData
+
+    while True:
+        jointData = get_modbus_data()
+        print(jointData)
+        sleep(1)
         
 if __name__ == '__main__':
-    app.run(debug=True, host=IPAddr)
-    # app.run(debug=True)
-    # app.run(debug=True)
+    parent_conn,child_conn = Pipe()
+    p = Process(target=extractData)
+    p.start()
+    p = Process(target=app.run(debug=True))
+    p.start()
+    
+    # app.run(debug=True, host=IPAddr)
+    

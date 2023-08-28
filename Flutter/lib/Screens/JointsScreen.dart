@@ -53,6 +53,8 @@ class _JointsScreenState extends State<JointsScreen> {
       stream: getCobotData(),
       builder: (BuildContext context, AsyncSnapshot<Map<String, double>> snapshot) {
 
+        Widget body = Container();
+
         if (snapshot.hasError) {
           print(snapshot.error);
         }
@@ -73,79 +75,87 @@ class _JointsScreenState extends State<JointsScreen> {
               )
               .toList();
 
-          return Scaffold(
-            appBar: MainAppBar(
-              title: "Joints",
-              settings: () {
-                slideDownTo(
-                  context: context,
-                  screen: const SettingsScreen()
-                );
-              },
+          body = Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: screenSize.width / 10
             ),
-            body: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: screenSize.width / 10
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: screenSize.height / 50
-                        ),
-                        child: const Text(
-                          "6 Axis Cobot",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: screenSize.width / 10,
-                      vertical: screenSize.height / 50
-                    ),
-                    child: Image.asset("images/Cobot Image.png")
-                  ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Joint Data",
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: screenSize.height / 50
+                      ),
+                      child: const Text(
+                        "6 Axis Cobot",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 30
                         ),
                       ),
-                    ]
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenSize.width / 10,
+                    vertical: screenSize.height / 50
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: screenSize.height / 50
+                  child: Image.asset("images/Cobot Image.png")
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Joint Data",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: widgetList,
-                        ),
-                      ],
-                    ) 
-                  )
-                ]
-              ),
+                  ]
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: screenSize.height / 50
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: widgetList,
+                      ),
+                    ],
+                  ) 
+                )
+              ]
             ),
           );
         }
-        
-        return const Center(child: CircularProgressIndicator(),);
+
+        else {
+
+          body = const Center(
+            child: CircularProgressIndicator()
+          );
+
+        }
+
+        return Scaffold(
+          appBar: MainAppBar(
+            title: "Joints",
+            settings: () {
+              slideDownTo(
+                context: context,
+                screen: const SettingsScreen()
+              );
+            },
+          ),
+          body: body,
+        );
       }
     );
 
