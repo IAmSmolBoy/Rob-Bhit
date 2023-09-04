@@ -91,6 +91,16 @@ MODBUS_COMMANDS = {
 }
 MODBUS = connect_modbus()
 
+# Variables
+jointData = {}
+
+getJoint = lambda : jointData
+
+def setJoint(angle):
+    global jointData
+    
+    jointData = angle
+
 def dec_to_bin_str(dec):
     return '{0:016b}'.format(dec)
 
@@ -99,21 +109,22 @@ def get_modbus_data():
 
     data_entry = {}
 
-    # Query non macro info
-    # for command, number in MODBUS_COMMANDS.items():
+    # Query Modbus Data
+    for command, number in MODBUS_COMMANDS.items():
 
-    #     [ word1, word2 ] = MODBUS.read_input_registers(number, 2)
+        [ word1, word2 ] = MODBUS.read_input_registers(number, 2)
 
-    #     data_entry[command] = struct.unpack('!f', struct.pack('!I', int(dec_to_bin_str(word1) + dec_to_bin_str(word2), 2)))[0]
+        data_entry[command] = struct.unpack('!f', struct.pack('!I', int(dec_to_bin_str(word1) + dec_to_bin_str(word2), 2)))[0]
 
-    # print(data_entry)
+    print(data_entry)
         
-    # return data_entry
-    return {
-        "Joint 1": 12.34,
-        "Joint 2": 12.34,
-        "Joint 3": 12.34,
-        "Joint 4": 12.34,
-        "Joint 5": 12.34,
-        "Joint 6": 12.34,
-    }
+    return data_entry
+
+    # return {
+    #     "Joint 1": 12.34,
+    #     "Joint 2": 12.34,
+    #     "Joint 3": 12.34,
+    #     "Joint 4": 12.34,
+    #     "Joint 5": 12.34,
+    #     "Joint 6": 12.34,
+    # }

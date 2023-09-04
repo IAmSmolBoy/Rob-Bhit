@@ -1,52 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class SignUpLoginTextField extends StatelessWidget {
+class MainTextField extends StatelessWidget {
 
-  const SignUpLoginTextField({
+  const MainTextField({
     super.key,
     required this.labelText,
-    required this.color,
     required this.prefixIcon,
     this.visible = true,
+    this.last = false,
     this.toggleVisibility,
     this.onSaved,
     this.onChanged,
     this.validator,
-    this.last = false
+    this.keyboard,
+    this.defaultVal
   });
   
   final String labelText;
-  final Color color;
   final IconData prefixIcon;
   final bool visible, last;
   final void Function()? toggleVisibility;
   final void Function(String?)? onSaved, onChanged;
   final String? Function(String?)? validator;
+  final TextInputType? keyboard;
+  final String? defaultVal;
 
   @override
   Widget build(BuildContext context) {
+
+    Color priColor = Theme.of(context).colorScheme.primary;
 
     return TextFormField(
       onSaved: onSaved,
       onChanged: onChanged,
       validator: validator,
       obscureText: !visible,
-      style: TextStyle(color: color),
+      initialValue: defaultVal,
+      style: TextStyle(color: priColor),
+      keyboardType: keyboard,
       textInputAction:
         last ?
           TextInputAction.done :
           TextInputAction.next,
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(color: color),
+        labelStyle: TextStyle(color: priColor),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: color)
+          borderSide: BorderSide(color: priColor)
         ),
         prefixIcon: Icon(
           prefixIcon,
           size: 14,
-          color: color
+          color: priColor
         ),
         suffixIcon:
           toggleVisibility != null ?
@@ -54,7 +60,7 @@ class SignUpLoginTextField extends StatelessWidget {
               onPressed: toggleVisibility,
               icon: Icon(
                 size: 14,
-                color: color,
+                color: priColor,
                 visible ? 
                   FontAwesomeIcons.eyeSlash :
                   FontAwesomeIcons.eye,

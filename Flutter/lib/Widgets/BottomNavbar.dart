@@ -38,10 +38,7 @@ class BottomNavbar extends StatelessWidget {
       items: screenDataList.map((data) => BottomNavyBarItem(
         icon: Icon(data.icon),
         title: Text(data.title),
-        activeColor: 
-          data.color != null ?
-            data.color! :
-            Theme.of(context).colorScheme.primary,
+        activeColor: data.color,
       )).toList(),
     );
 

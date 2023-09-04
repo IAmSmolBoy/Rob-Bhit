@@ -1,8 +1,35 @@
+// ------------------- Imports -------------------
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+
+
+
+
+
+
+
+
+
+// ------------------- Variables -------------------
+late SharedPreferences prefs;
+Color color = Color(0xff2aaae2);
+Map<String, double> turns = {};
+
+
+
+
+
+
+
+
+
+
+// ------------------- Functions -------------------
 String? emailValidator(String? value) {
 
   String? msg;
@@ -46,15 +73,11 @@ String? emailValidator(String? value) {
 
 }
 
-bool extract = false;
 
-void stopExtract() => extract = false;
-
+// Request Functions
 Stream<Map<String, double>> getCobotData() async* {
 
-  extract = true;
-
-  while (extract) {
+  while (true) {
 
     Response response = await get(
       Uri(
@@ -73,5 +96,42 @@ Stream<Map<String, double>> getCobotData() async* {
     await Future.delayed(const Duration(seconds: 1));
 
   }
+
+}
+
+Stream<Map<String, double>> getJointTurns() async* {
+
+  while (true) {
+
+    Response response = await get(
+      Uri(
+        scheme: "http",
+        host: dotenv.env['SERVERIP'],
+        port: 5000,
+        path: "/turns"
+      )
+    );
+    
+    Map body = json.decode(response.body);
+    Map<String, double> data = body.map<String, double>((key, value) => MapEntry("$key", value));
+
+    yield data;
+
+    await Future.delayed(const Duration(seconds: 1));
+
+  }
+
+}
+
+void resetTurns() {
+
+  post(
+    Uri(
+      scheme: "http",
+      host: dotenv.env['SERVERIP'],
+      port: 5000,
+      path: "/reset-turns"
+    )
+  );
 
 }

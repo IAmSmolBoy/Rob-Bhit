@@ -29,17 +29,17 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             HomeCard(
-              image: "ROEE Home",
-              title: "ROEE",
-              subTitle: "Robot Overall Equipment Effectiveness",
+              image: "Health Home",
+              title: "Health",
+              subTitle: "Monitor your machine's health",
               onTap: () {
                 widget.setPage!(0);
               },
             ),
             HomeCard(
-              image: "Health Home",
-              title: "Health",
-              subTitle: "Monitor your machine's health",
+              image: "ROEE Home",
+              title: "ROEE",
+              subTitle: "Robot Overall Equipment Effectiveness",
               onTap: () {
                 widget.setPage!(1);
               },

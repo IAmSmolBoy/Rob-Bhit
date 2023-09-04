@@ -9,7 +9,7 @@ import 'package:rob_bhit/Screens/SignUpScreen.dart';
 import 'package:rob_bhit/Widgets/LoginButton.dart';
 import 'package:rob_bhit/Widgets/LoginLayout.dart';
 import 'package:rob_bhit/Widgets/SignUpButton.dart';
-import 'package:rob_bhit/Widgets/SignUpLoginTextField.dart';
+import 'package:rob_bhit/Widgets/MainTextField.dart';
 import 'package:rob_bhit/utils/helper.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -90,16 +90,14 @@ class _LoginScreenState extends State<LoginScreen> {
       screenSize: screenSize,
       error: error,
       children: [
-        SignUpLoginTextField(
+        MainTextField(
           labelText: "Email",
-          color: priColor,
           prefixIcon: FontAwesomeIcons.envelope,
           onSaved: (String? value) => email = value ?? "",
           validator: emailValidator
         ),
-        SignUpLoginTextField(
+        MainTextField(
           labelText: "Password",
-          color: priColor,
           prefixIcon: FontAwesomeIcons.lock,
           visible: visible,
           toggleVisibility: toggleVisibility,

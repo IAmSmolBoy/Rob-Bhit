@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rob_bhit/Screens/SettingsScreen.dart';
 import 'package:rob_bhit/Widgets/AppBar.dart';
 import 'package:rob_bhit/utils/helper.dart';
-
-import '../utils/navigation.dart';
 
 class JointsScreen extends StatefulWidget {
   const JointsScreen({ super.key });
@@ -56,12 +53,12 @@ class _JointsScreenState extends State<JointsScreen> {
         Widget body = Container();
 
         if (snapshot.hasError) {
+          
           print(snapshot.error);
+          
         }
 
         if (snapshot.hasData) {
-
-          print(snapshot.data);
 
           List<Widget> widgetList =
             snapshot
@@ -145,15 +142,7 @@ class _JointsScreenState extends State<JointsScreen> {
         }
 
         return Scaffold(
-          appBar: MainAppBar(
-            title: "Joints",
-            settings: () {
-              slideDownTo(
-                context: context,
-                screen: const SettingsScreen()
-              );
-            },
-          ),
+          appBar: const MainAppBar(title: "Joints"),
           body: body,
         );
       }

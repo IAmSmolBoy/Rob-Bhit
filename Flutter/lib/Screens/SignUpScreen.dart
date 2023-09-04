@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
 import 'package:rob_bhit/Widgets/LoginLayout.dart';
 import 'package:rob_bhit/Widgets/SignUpButton.dart';
-import 'package:rob_bhit/Widgets/SignUpLoginTextField.dart';
+import 'package:rob_bhit/Widgets/MainTextField.dart';
 import 'package:rob_bhit/utils/helper.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -88,9 +88,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       formKey: _formKey,
       error: error,
       children: [
-        SignUpLoginTextField(
+        MainTextField(
           labelText: "Name",
-          color: priColor,
           prefixIcon: FontAwesomeIcons.user,
           onSaved: (String? value) => name = value ?? "",
           validator: (String? value) => 
@@ -98,16 +97,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
               "Please enter your name" :
               null
         ),
-        SignUpLoginTextField(
+        MainTextField(
           labelText: "Email",
-          color: priColor,
           prefixIcon: FontAwesomeIcons.envelope,
           onSaved: (String? value) => email = value ?? "",
           validator: emailValidator
         ),
-        SignUpLoginTextField(
+        MainTextField(
           labelText: "Password",
-          color: priColor,
           prefixIcon: FontAwesomeIcons.lock,
           visible: visible,
           toggleVisibility: toggleVisibility,
@@ -117,9 +114,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               "Please enter your password" :
               null
         ),
-        SignUpLoginTextField(
+        MainTextField(
           labelText: "Confirm Password",
-          color: priColor,
           prefixIcon: FontAwesomeIcons.lock,
           visible: visible2,
           last: true,

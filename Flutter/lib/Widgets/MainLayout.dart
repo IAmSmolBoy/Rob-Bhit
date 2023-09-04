@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rob_bhit/Screens/Home.dart';
-import 'package:rob_bhit/Screens/SettingsScreen.dart';
 import 'package:rob_bhit/Widgets/AppBar.dart';
 import 'package:rob_bhit/Widgets/BottomNavbar.dart';
 import 'package:rob_bhit/classes/ScreenData.dart';
@@ -15,6 +14,7 @@ class MainLayout extends StatelessWidget {
     required this.onItemSelected,
     required this.tabController,
     required this.icon,
+    required this.color
   });
 
   final String title;
@@ -22,6 +22,7 @@ class MainLayout extends StatelessWidget {
   final void Function(int) onItemSelected;
   final IconData icon;
   final TabController tabController;
+  final Color color;
   
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class MainLayout extends StatelessWidget {
           controller: tabController,
           children:
             screenDataList
-              .map((data) => data.screen ?? Container())
+              .map((data) => data.screen)
               .toList()
         ),
         bottomNavigationBar: BottomNavbar(
@@ -52,12 +53,7 @@ class MainLayout extends StatelessWidget {
         appBar: MainAppBar(
           title: title,
           icon: icon,
-          settings: () {
-            slideDownTo(
-              context: context,
-              screen: const SettingsScreen()
-            );
-          }
+          color: color,
         ),
       )
     );

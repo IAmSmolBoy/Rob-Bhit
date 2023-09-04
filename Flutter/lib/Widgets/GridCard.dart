@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:rob_bhit/Widgets/CardContent.dart';
+import 'package:rob_bhit/utils/helper.dart';
 
 class GridCard extends StatelessWidget {
 
@@ -9,49 +11,36 @@ class GridCard extends StatelessWidget {
     required this.subTitle,
   });
 
-  final Function() onTap;
+  final void Function() onTap;
   final String title, subTitle;
 
   @override
   Widget build(BuildContext context) {
 
-    final Color priColor = Theme.of(context).colorScheme.primary;
-
-    
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        clipBehavior: Clip.antiAlias,
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8)
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 10
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 10
+      ),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8)
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: priColor,
-                ),
+              CardContent(
+                title: title,
+                subtitle: subTitle,
+                titleColor: color,
+                subtitleColor: color
+                // titleSize: 17,
+                // subTitleSize: 12.5,
               ),
-              Container(height: 10),
-              Text(
-                subTitle,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: priColor,
-                ),
-              ),
-              Container(height: 5),
             ],
           ),
         ),

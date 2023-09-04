@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rob_bhit/Screens/SettingsForm.dart';
 import 'package:rob_bhit/Widgets/AppBar.dart';
+import 'package:rob_bhit/utils/helper.dart';
 import 'package:rob_bhit/utils/navigation.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -26,42 +27,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  // Future<Map<String, dynamic>> getData() async {
-  //   Response response = await get(
-  //     Uri(
-  //       scheme: "http",
-  //       host: dotenv.env['SERVERIP'],
-  //       port: 5000,
-  //       path: "/current/cobot"
-  //     )
-  //   );
-    
-  //   return json.decode(response.body);
-  // }
+
+  // Settings
+  int turnAlarm = prefs.getInt('turnAlarm') ?? 0;
+
+  void setTurnAlarm(val) {
+    setState(() {
+      turnAlarm = val;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    // return FutureBuilder(
-    //   future: getData(),
-    //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-    //     if (snapshot.connectionState != ConnectionState.done) {
-    //       // Return what ur user sees when loading
-    //       return const Center(child: CircularProgressIndicator());
-    //     }
-    //     else if (snapshot.hasError) {
-    //       // Return what ur user sees when an error occurs
-    //       return Center(child: Text("Something went wrong. ${snapshot.error}"));
-    //     }
-    //     else if (snapshot.hasData) {
-    //       // Return ur screen
-    //       return Screen();
-    //     }
-    //     else {
-    //       return Container();
-    //     }
-    //   }
-    // );
     
     return Scaffold(
       appBar: const MainAppBar(
@@ -70,13 +47,53 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: SettingsList(
         sections: [
           SettingsSection(
+            title: Text('Robot'),
+            tiles: <SettingsTile>[
+              SettingsTile.navigation(
+                leading: const Icon(Icons.replay_circle_filled_outlined),
+                title: const Text('Turns Alarm'),
+                value: Text('$turnAlarm'),
+                onPressed:
+                  (context) => fadeTo(
+                    context: context,
+                    screen: SettingsForm(
+                      labelText: "Turns Alarm",
+                      prefixIcon: Icons.replay_circle_filled_outlined,
+                      keyboard: TextInputType.number,
+                      currVal: "$turnAlarm",
+                      set: (val) {
+                        final int submittedVal = int.tryParse(val) ?? 0;
+
+                        setTurnAlarm(submittedVal);
+                        prefs.setInt("turnAlarm", submittedVal);
+                      },
+                    )
+                  ),
+              ),
+              SettingsTile.switchTile(
+                onToggle: toggle,
+                initialValue: test,
+                leading: Icon(Icons.format_paint),
+                title: Text('Enable custom theme'),
+              ),
+            ],
+          ),
+          SettingsSection(
             title: Text('Common'),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: Icon(Icons.language),
                 title: Text('Language'),
                 value: Text('English'),
-                onPressed: (context) => fadeTo(context: context, screen: SettingsForm()),
+                onPressed:
+                (context) => fadeTo(
+                  context: context,
+                  screen: SettingsForm(
+                    set: (val) => prefs.setInt("", val),
+                    labelText: "",
+                    prefixIcon: Icons.circle
+                  )
+                ),
               ),
               SettingsTile.switchTile(
                 onToggle: toggle,

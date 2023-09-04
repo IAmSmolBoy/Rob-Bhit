@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:rob_bhit/Screens/Home.dart';
 import 'package:rob_bhit/classes/ScreenData.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rob_bhit/Screens/FaultAlarmScreen.dart';
@@ -8,30 +9,34 @@ import 'package:rob_bhit/Screens/RoeeScreen.dart';
 import 'package:rob_bhit/Screens/SustainabilityScreen.dart';
 
     List<ScreenData> screenDataList = [
-      ScreenData(
-        title: "ROEE",
-        screen: const RoeeScreen(),
-        icon: FontAwesomeIcons.gaugeSimpleHigh
-      ),
-      ScreenData(
+      const ScreenData(
         title: "Health",
-        screen: const HealthScreen(),
-        icon: Icons.monitor_heart_outlined
+        screen: HealthScreen(),
+        icon: Icons.monitor_heart_outlined,
+        color: Color(0xffff006e)
       ),
-      ScreenData(
+      const ScreenData(
+        title: "ROEE",
+        screen: RoeeScreen(),
+        icon: FontAwesomeIcons.gaugeSimpleHigh,
+        color: Color(0xfffb5607)
+      ),
+      const ScreenData(
         title: "Home",
+        screen: Home(),
         icon: Icons.home
       ),
-      ScreenData(
+      const ScreenData(
         title: "Alarms",
-        screen: const FaultAlarmScreen(),
+        screen: FaultAlarmScreen(),
         icon: Icons.warning,
+        color: Color(0xffFF483E)
       ),
-      ScreenData(
+      const ScreenData(
         title: "Green",
-        screen: const SustainabilityScreen(),
+        screen: SustainabilityScreen(),
         icon: Icons.recycling,
-        color: const Color(0xff2DB680)
+        color: Color(0xff2DB680)
       )
     ];
 

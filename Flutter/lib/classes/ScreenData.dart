@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 class ScreenData {
 
-  ScreenData({
+  const ScreenData({
     required this.title,
     required this.icon,
-    this.screen,
-    this.color
+    required this.screen,
+    this.color = const Color(0xff2aaae2),
   });
 
   final String title;
+  final Widget screen;
   final IconData icon;
-  final Widget? screen;
-  final Color? color;
+  final Color color;
 
 }

@@ -85,6 +85,11 @@ flutter:
     - images/Sustainability Home.png
     - images/Fault Alarms Home.png
     - images/Cobot Image.png
+    - images/Cobot Icon Pink.png
+    - images/Delta Icon.png
+    - images/Scara Robot Icon.png
+    - images/CNC Icon.png
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

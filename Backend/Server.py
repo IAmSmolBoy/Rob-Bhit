@@ -1,12 +1,13 @@
 # Dependencies
-from multiprocessing import Pipe, Process
-from flask import Flask, request
+import json
+from multiprocessing import Manager, Process
+import random
+from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # Mongo
-# from mongo import HaasCNCData, OmronCobot
 import pymongo
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -14,23 +15,22 @@ mongoDB = client["Siemens_Competition"]
 
 HaasCNCData = mongoDB["Haas_Machine_Data"]
 OmronCobot = mongoDB["Omron_Cobot"]
+jointsDB = mongoDB["Joints"]
+turnsDB = mongoDB["Turns"]
 users = mongoDB["Users"]
+
+# get Ip Addr
+import socket
+hostname = socket.gethostname()
+IPAddr = socket.gethostbyname(hostname)
 
 # Helper
 from helper import *
 
-# Connections
-from connections import IPAddr
-
-# Variables
-jointData = {}
 
 
 
 
-
-
-getJoint = lambda : jointData
 
 app = Flask(__name__)
 
@@ -78,8 +78,6 @@ def register():
 
 @app.route('/current/<machine>', methods=['GET'])
 def current(machine):
-    global jointData
-
     match machine:
         case "cnc":
             data = HaasCNCData.find_one(
@@ -94,23 +92,60 @@ def current(machine):
             return data
         
         case "cobot":
-            print(getJoint())
-            return getJoint()
+
+            return jointsDB.find_one({}, { '_id': False })
+
+@app.route('/turns', methods=['GET'])
+def turns():
+    return turnsDB.find_one({}, { '_id': False })
+
+@app.route('/reset-turns', methods=['POST'])
+def resetTurns():
+    turnsDB.find_one_and_replace({}, {
+        "Joint 1": 0.0,
+        "Joint 2": 0.0,
+        "Joint 3": 0.0,
+        "Joint 4": 0.0,
+        "Joint 5": 0.0,
+        "Joint 6": 0.0,
+    })
+    return {}
 
 def extractData():
-    global jointData
 
     while True:
-        jointData = get_modbus_data()
-        print(jointData)
+
+        prevJoints = jointsDB.find_one({}, { '_id': False })
+        temp = prevJoints.copy()
+        turns = turnsDB.find_one({}, { '_id': False })
+        # newJoints = get_modbus_data()
+
+        for joint, angle in temp.items():
+            temp[joint] = angle + random.random() - .5
+
+            if temp[joint] < 0:
+                temp[joint] = 0.0
+
+            elif temp[joint] > 360:
+                temp[joint] = 360.0
+        
+
+        for joint, angle in prevJoints.items():
+            turns[joint] += abs(temp[joint] - prevJoints[joint])
+
+        jointsDB.find_one_and_replace({}, temp)
+        turnsDB.find_one_and_replace({}, turns)
+
+        # OmronCobot
+
         sleep(1)
+
         
 if __name__ == '__main__':
-    parent_conn,child_conn = Pipe()
-    p = Process(target=extractData)
-    p.start()
-    p = Process(target=app.run(debug=True))
-    p.start()
+
+    extract = Process(target=extractData)
+    extract.start()
+    app.run(debug=True)
     
     # app.run(debug=True, host=IPAddr)
     

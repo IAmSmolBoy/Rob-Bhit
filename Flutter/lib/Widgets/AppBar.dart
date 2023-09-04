@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:rob_bhit/Screens/SettingsScreen.dart';
+import 'package:rob_bhit/utils/navigation.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 
@@ -6,12 +8,14 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     this.icon,
-    this.settings
+    this.settings = true,
+    this.color,
   });
 
   final String title;
   final IconData? icon;
-  final void Function()? settings;
+  final bool settings;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -23,33 +27,38 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.white,
       elevation: 5,
       iconTheme: IconThemeData(
-        color: priColor, //change your color here
+        color: color ?? priColor,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
       titleTextStyle: TextStyle(
-        color: priColor,
+        color: color ?? priColor,
         fontWeight: FontWeight.bold,
         fontSize: 20
       ),
       leading: icon != null ?
         Icon(
           icon,
-          color: priColor
+          color: color ?? priColor
         ) :
         null,
-      actions: settings != null ?
+      actions: settings ?
         [
           IconButton(
             icon: Icon(
               Icons.settings,
-              color: priColor
+              color: color ?? priColor
             ),
-            onPressed: settings,
+            onPressed: () {
+              slideDownTo(
+                context: context,
+                screen: const SettingsScreen()
+              );
+            },
           )
         ] :
-        null,
+        null
     );
 
   }

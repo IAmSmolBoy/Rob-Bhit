@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rob_bhit/Widgets/CardContent.dart';
-import 'package:rob_bhit/utils/helper.dart';
 
-class HomeCard extends StatelessWidget {
+class HealthCard extends StatelessWidget {
 
-  const HomeCard({
+  const HealthCard({
     super.key,
     required this.image,
     required this.title,
@@ -33,24 +32,34 @@ class HomeCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8)
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Image.asset(
-                imgURL,
-                width: double.infinity,
-                fit: BoxFit.contain,
-              ),
               CardContent(
                 title: title,
                 subtitle: subTitle,
-                titleColor: color,
-                subtitleColor: color
+                titleColor: const Color(0xff2aaae2),
+                subtitleColor: Colors.black,
+                // titleSize: 17,
+                // subTitleSize: 12.5,
               ),
-              Container(height: 5),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 20
+                ),
+                child: Image.asset(
+                  imgURL,
+                  width: double.infinity,
+                  fit: BoxFit.contain,
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+
   }
+
 }

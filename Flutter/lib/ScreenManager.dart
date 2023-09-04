@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rob_bhit/Widgets/MainLayout.dart';
+import 'package:rob_bhit/utils/helper.dart';
 import 'package:rob_bhit/utils/navigation.dart';
 
 class ScreenManager extends StatefulWidget {
@@ -14,6 +15,15 @@ class _ScreenManagerState extends State<ScreenManager> with SingleTickerProvider
   int pageIndex = 2;
   late TabController _tabController;
 
+  void setPage(int i) {
+    setState(() {
+      pageIndex = i;
+    });
+
+    _tabController.animateTo(i);
+    color = screenDataList[i].color;
+  }
+
   @override
   void initState() {
 
@@ -27,6 +37,7 @@ class _ScreenManagerState extends State<ScreenManager> with SingleTickerProvider
 
     _tabController.addListener(() {
       setState(() {
+        color = screenDataList[_tabController.index].color;
         pageIndex = _tabController.index;
       });
     });
@@ -39,24 +50,36 @@ class _ScreenManagerState extends State<ScreenManager> with SingleTickerProvider
     super.dispose();
   }
 
-  void setPage(int i) {
-    setState(() {
-      pageIndex = i;
-    });
-
-    _tabController.animateTo(i);
-  }
-
   
   @override
   Widget build(BuildContext context) {
 
-    return MainLayout(
-      title: screenDataList[pageIndex].title,
-      icon: screenDataList[pageIndex].icon,
-      pageIndex: pageIndex,
-      onItemSelected: setPage,
-      tabController: _tabController,
+    return StreamBuilder(
+      stream: getJointTurns(),
+      builder: (context, snapshot) {
+
+        // String msg = "";
+
+        // if (snapshot.hasError) {
+        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+        // }
+        
+        
+
+        // setState(() {
+        //   turns
+        // });
+
+        return MainLayout(
+          title: screenDataList[pageIndex].title,
+          icon: screenDataList[pageIndex].icon,
+          color: screenDataList[pageIndex].color,
+          pageIndex: pageIndex,
+          onItemSelected: setPage,
+          tabController: _tabController,
+        );
+
+      },
     );
 
   }
