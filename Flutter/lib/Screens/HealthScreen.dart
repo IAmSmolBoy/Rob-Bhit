@@ -20,7 +20,7 @@ class _HealthScreenState extends State<HealthScreen> {
       padding: const EdgeInsets.all(20),
       crossAxisCount: 2,
       shrinkWrap: true,
-      childAspectRatio: .6125,
+      childAspectRatio: .65,
       children: [
         // TransparentImageCard(
         //   width: 200,
@@ -37,7 +37,7 @@ class _HealthScreenState extends State<HealthScreen> {
         HealthCard(
           image: "Cobot Icon Pink",
           title: 'Cobot 001',
-          subTitle: 'Health Status:',
+          // subTitle: 'Health Status:',
           onTap: () {
             slideRightTo(
               context: context,
@@ -48,31 +48,31 @@ class _HealthScreenState extends State<HealthScreen> {
         HealthCard(
           image: "Scara Robot Icon",
           title: 'SCARA 01',
-          subTitle: 'Health Status',
+          // subTitle: 'Health Status',
           onTap: () {  },
         ),
         HealthCard(
           image: "Delta Icon",
           title: 'DELTA 01',
-          subTitle: 'Health Status',
+          // subTitle: 'Health Status',
           onTap: () {  },
         ),
         HealthCard(
           image: "CNC Icon",
           title: 'CNC XY 01',
-          subTitle: 'Health Status',
+          // subTitle: 'Health Status',
           onTap: () {  },
         ),
         HealthCard(
           image: "Cobot Icon Pink",
           title: 'Cobot 002',
-          subTitle: 'Health Status',
+          // subTitle: 'Health Status',
           onTap: () {  },
         ),
         HealthCard(
           image: "CNC Icon",
           title: 'CNC XY 02',
-          subTitle: 'Health Status',
+          // subTitle: 'Health Status',
           onTap: () {  },
         ),
       ]

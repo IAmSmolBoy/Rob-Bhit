@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:rob_bhit/ScreenManager.dart';
+import 'package:rob_bhit/classes/AppColors.dart';
+import 'package:rob_bhit/test.dart';
 import 'package:rob_bhit/utils/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +24,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(colorScheme: lightTheme),
       darkTheme: ThemeData(colorScheme: darkTheme),
       home: const ScreenManager(),
+      // home: const Test(),
+      // home: const TestStateful(),
     );
 
   }
@@ -29,29 +33,29 @@ class MyApp extends StatelessWidget {
 }
 
 ColorScheme lightTheme = const ColorScheme(
-  primary: Color(0xff2aaae2),
-  secondary: Color(0xff2DB680),
-  error: Color(0xffFF483E),
+  primary: AppColors.primary,
+  secondary: AppColors.secondary,
+  error: AppColors.red,
   background: Colors.white,
   surface: Colors.white,
   brightness: Brightness.light,
   onPrimary: Colors.white,
   onSecondary: Colors.white,
   onError: Colors.white,
-  onBackground: Color(0xff2aaae2),
-  onSurface: Color(0xff2aaae2)
+  onBackground: AppColors.primary,
+  onSurface: AppColors.primary
 );
 
 ColorScheme darkTheme = const ColorScheme(
-  primary: Color(0xff2699FB),
-  secondary: Color(0xff2DB680),
-  error: Color(0xffFF483E),
+  primary: AppColors.primaryDark,
+  secondary: AppColors.secondary,
+  error: AppColors.red,
   background: Colors.black,
   surface: Colors.black,
   brightness: Brightness.dark,
   onPrimary: Colors.black,
   onSecondary: Colors.black,
   onError: Colors.black,
-  onBackground: Color(0xff2699FB),
-  onSurface: Color(0xff2699FB)
+  onBackground: AppColors.primaryDark,
+  onSurface: AppColors.primaryDark
 );

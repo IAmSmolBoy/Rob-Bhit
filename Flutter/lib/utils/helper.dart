@@ -1,9 +1,11 @@
 // ------------------- Imports -------------------
 import 'dart:convert';
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
+import 'package:rob_bhit/classes/AppColors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -17,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // ------------------- Variables -------------------
 late SharedPreferences prefs;
-Color color = Color(0xff2aaae2);
+Color color = AppColors.primary;
 Map<String, double> turns = {};
 
 
@@ -72,6 +74,12 @@ String? emailValidator(String? value) {
   return msg;
 
 }
+
+
+// Graph Functions
+Widget leftTitles(double value, TitleMeta meta) {
+  return Container();
+} 
 
 
 // Request Functions

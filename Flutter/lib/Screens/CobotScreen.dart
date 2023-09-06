@@ -3,7 +3,7 @@ import 'package:rob_bhit/Screens/JointsScreen.dart';
 import 'package:rob_bhit/Screens/TurnsScreen.dart';
 import 'package:rob_bhit/Widgets/AppBar.dart';
 import 'package:rob_bhit/Widgets/GridCard.dart';
-import 'package:rob_bhit/utils/helper.dart';
+import 'package:rob_bhit/classes/AppColors.dart';
 import 'package:rob_bhit/utils/navigation.dart';
 
 class CobotScreen extends StatefulWidget {
@@ -19,9 +19,9 @@ class _CobotScreenState extends State<CobotScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: MainAppBar(
+      appBar: const MainAppBar(
         title: "Cobot",
-        color: color,
+        color: AppColors.pink,
       ),
       body: GridView.count(
         primary: false,

@@ -5,16 +5,18 @@ class CardContent extends StatelessWidget {
   const CardContent({
     super.key,
     required this.title,
-    required this.subtitle,
     required this.titleColor,
-    required this.subtitleColor,
+    this.subtitleColor,
+    this.subtitle,
     this.titleSize = 24,
     this.subTitleSize = 15,
   });
 
-  final String title, subtitle;
+  final String title;
+  final String? subtitle;
   final double titleSize, subTitleSize;
-  final Color titleColor, subtitleColor;
+  final Color titleColor;
+  final Color? subtitleColor;
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +40,16 @@ class CardContent extends StatelessWidget {
               color: titleColor,
             ),
           ),
-          Container(height: 10),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: subTitleSize,
-              color: subtitleColor,
+          if (subtitle != null)
+            Container(height: 10),
+          if (subtitle != null)
+            Text(
+              subtitle!,
+              style: TextStyle(
+                fontSize: subTitleSize,
+                color: subtitleColor,
+              ),
             ),
-          ),
         ],
       ),
     );

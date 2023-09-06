@@ -17,32 +17,28 @@ class GridCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 10
-      ),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Card(
-          clipBehavior: Clip.antiAlias,
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8)
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8)
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 10
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              CardContent(
-                title: title,
-                subtitle: subTitle,
-                titleColor: color,
-                subtitleColor: color
-                // titleSize: 17,
-                // subTitleSize: 12.5,
-              ),
-            ],
-          ),
+          child: Center(
+            child: CardContent(
+              title: title,
+              subtitle: subTitle,
+              titleColor: color,
+              subtitleColor: color
+              // titleSize: 17,
+              // subTitleSize: 12.5,
+            ),
+          ) 
         ),
       ),
     );

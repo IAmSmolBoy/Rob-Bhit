@@ -7,11 +7,10 @@ class HealthCard extends StatelessWidget {
     super.key,
     required this.image,
     required this.title,
-    required this.subTitle,
     this.onTap,
   });
 
-  final String image, title, subTitle;
+  final String image, title;
   final void Function()? onTap;
 
   @override
@@ -37,9 +36,9 @@ class HealthCard extends StatelessWidget {
             children: <Widget>[
               CardContent(
                 title: title,
-                subtitle: subTitle,
-                titleColor: const Color(0xff2aaae2),
-                subtitleColor: Colors.black,
+                // subtitle: subTitle,
+                titleColor: Colors.black,
+                // subtitleColor: Colors.black,
                 // titleSize: 17,
                 // subTitleSize: 12.5,
               ),
