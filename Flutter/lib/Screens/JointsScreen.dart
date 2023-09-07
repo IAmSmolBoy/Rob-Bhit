@@ -143,7 +143,7 @@ class _JointsScreenState extends State<JointsScreen> {
 
         return Scaffold(
           appBar: const MainAppBar(title: "Joints"),
-          body: body,
+          body: SingleChildScrollView(child: body,)
         );
       }
     );

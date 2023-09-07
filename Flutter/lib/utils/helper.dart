@@ -116,9 +116,11 @@ Stream<Map<String, double>> getJointTurns() async* {
         scheme: "http",
         host: dotenv.env['SERVERIP'],
         port: 5000,
-        path: "/turns"
+        path: "/turns",
       )
     );
+
+    print(response.body);
     
     Map body = json.decode(response.body);
     Map<String, double> data = body.map<String, double>((key, value) => MapEntry("$key", value));

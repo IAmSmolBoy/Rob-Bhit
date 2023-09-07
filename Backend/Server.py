@@ -93,11 +93,23 @@ def current(machine):
         
         case "cobot":
 
-            return jointsDB.find_one({}, { '_id': False })
+            return {
+                "Joint 1": 0.0,
+                "Joint 2": 0.0,
+                "Joint 3": 0.0,
+                "Joint 4": 0.0,
+                "Joint 5": 0.0,
+                "Joint 6": 0.0
+            }
+
+            # return jointsDB.find_one({}, { '_id': False })
 
 @app.route('/turns', methods=['GET'])
 def turns():
-    return turnsDB.find_one({}, { '_id': False })
+    # return turnsDB.find_one({}, { '_id': False })
+    return {
+        "abc": 0.0
+    }
 
 @app.route('/reset-turns', methods=['POST'])
 def resetTurns():
@@ -111,40 +123,40 @@ def resetTurns():
     })
     return {}
 
-def extractData():
+# def extractData():
 
-    while True:
+#     while True:
 
-        prevJoints = jointsDB.find_one({}, { '_id': False })
-        temp = prevJoints.copy()
-        turns = turnsDB.find_one({}, { '_id': False })
-        # newJoints = get_modbus_data()
+        # prevJoints = jointsDB.find_one({}, { '_id': False })
+        # temp = prevJoints.copy()
+        # turns = turnsDB.find_one({}, { '_id': False })
+        # # newJoints = get_modbus_data()
 
-        for joint, angle in temp.items():
-            temp[joint] = angle + random.random() - .5
+        # for joint, angle in temp.items():
+        #     temp[joint] = angle + random.random() - .5
 
-            if temp[joint] < 0:
-                temp[joint] = 0.0
+        #     if temp[joint] < 0:
+        #         temp[joint] = 0.0
 
-            elif temp[joint] > 360:
-                temp[joint] = 360.0
+        #     elif temp[joint] > 360:
+        #         temp[joint] = 360.0
         
 
-        for joint, angle in prevJoints.items():
-            turns[joint] += abs(temp[joint] - prevJoints[joint])
+        # for joint, angle in prevJoints.items():
+        #     turns[joint] += abs(temp[joint] - prevJoints[joint])
 
-        jointsDB.find_one_and_replace({}, temp)
-        turnsDB.find_one_and_replace({}, turns)
+        # jointsDB.find_one_and_replace({}, temp)
+        # turnsDB.find_one_and_replace({}, turns)
 
-        # OmronCobot
+        # # OmronCobot
 
-        sleep(1)
+        # sleep(1)
 
         
 if __name__ == '__main__':
 
-    extract = Process(target=extractData)
-    extract.start()
+    # extract = Process(target=extractData)
+    # extract.start()
     app.run(debug=True)
     
     # app.run(debug=True, host=IPAddr)
