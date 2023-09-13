@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:rob_bhit/Widgets/HomeCard.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../classes/AppColors.dart';
@@ -50,6 +49,45 @@ class _HomeState extends State<Home> {
         ),
         child: Column(
           children: [
+//             HomeCard(
+//               image: "Health Home",
+//               title: "Health",
+//               subTitle: "Monitor your machine's health",
+//               titleColor: AppColors.pink,
+//               icon: Icons.monitor_heart_outlined,
+//               onTap: () {
+//                 widget.setPage!(0);
+//               },
+//             ),
+//             HomeCard(
+//               image: "ROEE Home",
+//               title: "OEE",
+//               subTitle: "Overall Equipment Effectiveness",
+//               titleColor: AppColors.orange,
+//               icon: FontAwesomeIcons.gaugeSimpleHigh,
+//               onTap: () {
+//                 widget.setPage!(1);
+//               },
+//             ),
+//             HomeCard(
+//               image: "Fault Alarms Home",
+//               title: "Fault Alarms",
+//               subTitle: "Fault Alarm Notifications",
+//               titleColor: AppColors.red,
+//               icon: Icons.warning,
+//               onTap: () {
+//                 widget.setPage!(3);
+//               },
+//             ),
+//             HomeCard(
+//               image: "Sustainability Home",
+//               title: "Sustainability",
+//               subTitle: "Monitor your carbon footprint",
+//               titleColor: AppColors.secondary,
+//               icon: Icons.recycling,
+//               onTap: () {
+//                 widget.setPage!(4);
+//               },
             // HomeCard(
             //   image: "Health Home",
             //   title: "Health",
