@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rob_bhit/Widgets/HomeCard.dart';
+import 'package:rob_bhit/classes/AppColors.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -32,14 +34,18 @@ class _HomeState extends State<Home> {
               image: "Health Home",
               title: "Health",
               subTitle: "Monitor your machine's health",
+              titleColor: AppColors.pink,
+              icon: Icons.monitor_heart_outlined,
               onTap: () {
                 widget.setPage!(0);
               },
             ),
             HomeCard(
               image: "ROEE Home",
-              title: "ROEE",
-              subTitle: "Robot Overall Equipment Effectiveness",
+              title: "OEE",
+              subTitle: "Overall Equipment Effectiveness",
+              titleColor: AppColors.orange,
+              icon: FontAwesomeIcons.gaugeSimpleHigh,
               onTap: () {
                 widget.setPage!(1);
               },
@@ -47,7 +53,9 @@ class _HomeState extends State<Home> {
             HomeCard(
               image: "Fault Alarms Home",
               title: "Fault Alarms",
-              subTitle: "Be notified of current fault alarms being triggered",
+              subTitle: "Fault Alarm Notifications",
+              titleColor: AppColors.red,
+              icon: Icons.warning,
               onTap: () {
                 widget.setPage!(3);
               },
@@ -55,7 +63,9 @@ class _HomeState extends State<Home> {
             HomeCard(
               image: "Sustainability Home",
               title: "Sustainability",
-              subTitle: "Monitor your carbon footprint to improve sustainability",
+              subTitle: "Monitor your carbon footprint",
+              titleColor: AppColors.secondary,
+              icon: Icons.recycling,
               onTap: () {
                 widget.setPage!(4);
               },

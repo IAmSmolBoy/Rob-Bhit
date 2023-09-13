@@ -54,32 +54,13 @@ class _ScreenManagerState extends State<ScreenManager> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
 
-    return StreamBuilder(
-      stream: getJointTurns(),
-      builder: (context, snapshot) {
-
-        // String msg = "";
-
-        // if (snapshot.hasError) {
-        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
-        // }
-        
-        
-
-        // setState(() {
-        //   turns
-        // });
-
-        return MainLayout(
-          title: screenDataList[pageIndex].title,
-          icon: screenDataList[pageIndex].icon,
-          color: screenDataList[pageIndex].color,
-          pageIndex: pageIndex,
-          onItemSelected: setPage,
-          tabController: _tabController,
-        );
-
-      },
+    return MainLayout(
+      title: screenDataList[pageIndex].title,
+      icon: screenDataList[pageIndex].icon,
+      color: screenDataList[pageIndex].color,
+      pageIndex: pageIndex,
+      onItemSelected: setPage,
+      tabController: _tabController,
     );
 
   }

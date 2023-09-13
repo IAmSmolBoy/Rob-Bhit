@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rob_bhit/Widgets/CardContent.dart';
-import 'package:rob_bhit/utils/helper.dart';
 
 class HomeCard extends StatelessWidget {
 
@@ -9,10 +8,14 @@ class HomeCard extends StatelessWidget {
     required this.image,
     required this.title,
     required this.subTitle,
+    required this.titleColor,
+    required this.icon,
     this.onTap,
   });
 
   final String image, title, subTitle;
+  final Color titleColor;
+  final IconData icon;
   final void Function()? onTap;
 
   @override
@@ -43,8 +46,9 @@ class HomeCard extends StatelessWidget {
               CardContent(
                 title: title,
                 subtitle: subTitle,
-                titleColor: color,
-                subtitleColor: color
+                titleColor: titleColor,
+                subtitleColor: Colors.grey,
+                icon: icon,
               ),
               Container(height: 5),
             ],

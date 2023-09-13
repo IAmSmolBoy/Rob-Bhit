@@ -2,14 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:rob_bhit/ScreenManager.dart';
 import 'package:rob_bhit/classes/AppColors.dart';
-import 'package:rob_bhit/test.dart';
 import 'package:rob_bhit/utils/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+
   await dotenv.load(fileName: ".env");
+
   prefs = await SharedPreferences.getInstance();
+
+
+  getAlarms();
+
+  // (json.decode(prefs.getString("alarms") ?? "{}") as Map<String, double>);
+
+  
+
+  print(alarms.tojson());
+
   runApp(const MyApp());
+
+  getJoints();
+
 }
 
 class MyApp extends StatelessWidget {

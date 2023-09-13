@@ -10,6 +10,7 @@ class CardContent extends StatelessWidget {
     this.subtitle,
     this.titleSize = 24,
     this.subTitleSize = 15,
+    this.icon,
   });
 
   final String title;
@@ -17,6 +18,7 @@ class CardContent extends StatelessWidget {
   final double titleSize, subTitleSize;
   final Color titleColor;
   final Color? subtitleColor;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -26,32 +28,44 @@ class CardContent extends StatelessWidget {
         horizontal: 15,
         vertical: 15
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            softWrap: false,
-            style: TextStyle(
-              fontSize: titleSize,
-              fontWeight: FontWeight.bold,
-              color: titleColor,
-            ),
-          ),
-          if (subtitle != null)
-            Container(height: 10),
-          if (subtitle != null)
-            Text(
-              subtitle!,
-              style: TextStyle(
-                fontSize: subTitleSize,
-                color: subtitleColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+                style: TextStyle(
+                  fontSize: titleSize,
+                  fontWeight: FontWeight.bold,
+                  color: titleColor,
+                ),
               ),
-            ),
+              if (subtitle != null)
+                Container(height: 10),
+              if (subtitle != null)
+                Text(
+                  subtitle!,
+                  style: TextStyle(
+                    fontSize: subTitleSize,
+                    color: subtitleColor,
+                  ),
+                ),
+            ],
+          ),
+          if (icon != null)
+            Icon(
+              icon,
+              color: titleColor,
+              size: titleSize + subTitleSize,
+            )
         ],
-      ),
+      )
+      
     );
 
   }

@@ -85,7 +85,7 @@ class _OEEBarGraphState extends State<OEEBarGraph> {
                         touchTooltipData: BarTouchTooltipData(
                           tooltipBgColor: Colors.blueGrey,
                           tooltipMargin: 10,
-                          maxContentWidth: 150,
+                          maxContentWidth: 200,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
 
                             OEEBarGraphData rod = widget.data[rodIndex];
@@ -95,7 +95,7 @@ class _OEEBarGraphState extends State<OEEBarGraph> {
                               .join("\n");
                             
                             return BarTooltipItem(
-                              "Productive Time",
+                              "Productive Time\n",
                               const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -133,17 +133,14 @@ class _OEEBarGraphState extends State<OEEBarGraph> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: bars
-            .map((BarInfo data) {
-
-              return Indicator(
+            .map((BarInfo data) =>
+              Indicator(
                 color: data.color,
                 text: data.name,
-              );
-            })
+              ))
             .toList()
             .reversed
             .toList(),
-
         ),
       ],
     );
