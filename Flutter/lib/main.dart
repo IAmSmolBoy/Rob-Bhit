@@ -11,14 +11,7 @@ void main() async {
 
   prefs = await SharedPreferences.getInstance();
 
-
   getAlarms();
-
-  // (json.decode(prefs.getString("alarms") ?? "{}") as Map<String, double>);
-
-  
-
-  print(alarms.tojson());
 
   runApp(const MyApp());
 

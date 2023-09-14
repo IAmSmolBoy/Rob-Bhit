@@ -99,16 +99,18 @@ void getAlarms() async {
       const Alarm("Due for replacement!", 1000),
     ];
 
+    alarms = AlarmNotifier.fromMap([
+      RobotAlarms('Cobot 001', robotAlarms),
+      RobotAlarms('SCARA 01', robotAlarms),
+      RobotAlarms('DELTA 01', robotAlarms),
+      RobotAlarms('CNC XY 01', robotAlarms),
+      RobotAlarms('Cobot 002', robotAlarms),
+      RobotAlarms('CNC XY 02', robotAlarms)
+    ]);
+
     prefs.setString(
       "alarms",
-      AlarmNotifier.fromMap([
-        RobotAlarms('Cobot 001', robotAlarms),
-        RobotAlarms('SCARA 01', robotAlarms),
-        RobotAlarms('DELTA 01', robotAlarms),
-        RobotAlarms('CNC XY 01', robotAlarms),
-        RobotAlarms('Cobot 002', robotAlarms),
-        RobotAlarms('CNC XY 02', robotAlarms)
-      ]).tojson()
+      alarms.tojson()
     );
 
   }
@@ -118,6 +120,10 @@ void getAlarms() async {
     alarms = AlarmNotifier.fromjson(alarmsjson);
 
   }
+
+  alarms.value.forEach((e) {
+    print("Robot: ${e.robot}, Alarms: ${e.alarms.map((e) => "msg: ${e.msg}, turns: ${e.turns}").toList()}",);
+  });
 
 }
 
