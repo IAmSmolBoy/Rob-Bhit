@@ -27,6 +27,7 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
   
   }
 
+
   void removeAlarm(int robotIndex, int alarmIndex) {
 
     super.value[robotIndex]
@@ -48,12 +49,32 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
 
   static AlarmNotifier fromjson(String jsonStr) {
 
-    List decoded = json.decode(jsonStr);
+    List decoded = (json.decode(jsonStr) as List)
+      .map((e) =>
+        (json.decode(e) as Map<String, dynamic>)
+          .map((key, value) =>
+            MapEntry(
+              key,
+              key == "alarms" ?
+                (value as List)
+                  .map((e) {
+
+                    return (json.decode(e) as Map)
+                      .map(
+                        (key, value) => MapEntry(key as String, value as double)
+                      );
+                  })
+                  .toList() :
+                value
+            )
+          )
+      )
+      .toList();
 
     return AlarmNotifier.fromMap(
-      decoded.isNotEmpty ?
-        decoded as List<RobotAlarms> :
-        []
+      decoded
+        .map((e) => RobotAlarms.fromMap(e))
+        .toList()
     );
 
   }
@@ -91,7 +112,7 @@ class RobotAlarms {
   static RobotAlarms fromMap(Map<String, dynamic> obj) =>
     RobotAlarms(
       obj["robot"],
-      (obj["alarms"] as List<Map<String, double>>)
+      (obj["alarms"] as List)
         .map((e) => Alarm.fromMap(e))
         .toList()
     );
@@ -127,7 +148,8 @@ class Alarm {
 
   static Alarm fromjson(String jsonStr) =>
     Alarm.fromMap(
-      json.decode(jsonStr) as Map<String, double>
+      json.decode(jsonStr)
     );
+    
 
 }
