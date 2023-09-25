@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rob_bhit/Screens/ChatScreen.dart';
 import 'package:rob_bhit/Screens/Home.dart';
 import 'package:rob_bhit/Widgets/AppBar.dart';
 import 'package:rob_bhit/Widgets/BottomNavbar.dart';
+import 'package:rob_bhit/classes/AppColors.dart';
 import 'package:rob_bhit/classes/ScreenData.dart';
 import 'package:rob_bhit/utils/navigation.dart';
 
@@ -54,6 +57,31 @@ class MainLayout extends StatelessWidget {
           title: title,
           icon: icon,
           color: color,
+        ),
+        floatingActionButton: FloatingActionButton(
+          tooltip: "Chatbot",
+          backgroundColor: AppColors.primary,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 6, right: 3),
+                child: const Icon(
+                  FontAwesomeIcons.robot, 
+                  color: Colors.white,
+                  size: 15,
+                ),
+              ),
+              const Icon(
+                Icons.chat_bubble_outline, 
+                color: Colors.white,
+                size: 35,
+              ),
+            ],
+          ),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatScreen()));
+          }
         ),
       )
     );
