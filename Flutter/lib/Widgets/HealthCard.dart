@@ -37,7 +37,7 @@ class HealthCard extends StatelessWidget {
               CardContent(
                 title: title,
                 // subtitle: subTitle,
-                titleColor: Colors.black,
+                titleColor: Theme.of(context).colorScheme.onPrimary,
                 // subtitleColor: Colors.black,
                 // titleSize: 17,
                 // subTitleSize: 12.5,

@@ -141,40 +141,36 @@ class _FaultAlarmScreenState extends State<FaultAlarmScreen> {
         child: ValueListenableBuilder(
           valueListenable: joints,
           builder: (context, data, widget) {
+            
+            RobotAlarms robot = alarms.value[0];
 
-            List<Widget> notificationWidgets = [];
+            List<Widget> notificationWidgets = [
+              titleWidget(robot.robot),
+              alarmGraph()
+            ];
 
-            for (RobotAlarms robot in alarms.value) {
+            for (JointTurns joint in data.turns) {
 
-              notificationWidgets.add(titleWidget(robot.robot));
+              bool alarmed = false;
+              int alarmIndex = robot.alarms.length - 1;
 
-              for (JointTurns joint in data.turns) {
+              for (Alarm alarm in robot.alarms.reversed) {
 
-                bool alarmed = false;
-                int alarmIndex = robot.alarms.length - 1;
+                if (alarm.turns < joint.turns && !alarmed) {
 
-                for (Alarm alarm in robot.alarms.reversed) {
-
-                  if (alarm.turns < joint.turns && !alarmed) {
-
-                    notificationWidgets.add(
-                      notificationWidget(
-                        "${alarm.msg}: ${joint.joint}",
-                        alarmColors[alarmIndex]
-                      )
-                    );
-                    alarmed = true;
-                    
-
-                  }
-
-                  alarmIndex--;
+                  notificationWidgets.add(
+                    notificationWidget(
+                      "${alarm.msg}: ${joint.joint}",
+                      alarmColors[alarmIndex]
+                    )
+                  );
+                  alarmed = true;
 
                 }
 
-              }
+                alarmIndex--;
 
-              notificationWidgets.add(alarmGraph());
+              }
 
             }
 

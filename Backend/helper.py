@@ -78,7 +78,6 @@ def get_cnc_data():
 # ------------------------ Modbus ------------------------ 
 
 from Connections.modbus import connect_modbus
-from time import sleep
 
 # Variables
 MODBUS_COMMANDS = {
@@ -91,19 +90,6 @@ MODBUS_COMMANDS = {
 }
 MODBUS = connect_modbus()
 
-# Variables
-jointData = {}
-
-getJoint = lambda : jointData
-
-def setJoint(angle):
-    global jointData
-    
-    jointData = angle
-
-def dec_to_bin_str(dec):
-    return '{0:016b}'.format(dec)
-
 # Extract Data from Omron Cobot
 def get_modbus_data():
 
@@ -112,19 +98,23 @@ def get_modbus_data():
     # Query Modbus Data
     for command, number in MODBUS_COMMANDS.items():
 
-        [ word1, word2 ] = MODBUS.read_input_registers(number, 2)
+        result = MODBUS.read_input_registers(number, 2)
 
-        data_entry[command] = struct.unpack('!f', struct.pack('!I', int(dec_to_bin_str(word1) + dec_to_bin_str(word2), 2)))[0]
+        if result != None:
 
-    print(data_entry)
+            [ word1, word2 ] = result
+
+            data_entry[command] = struct.unpack('!f',
+                struct.pack('!I',
+                    int(
+                        '{0:016b}'.format(word1) + '{0:016b}'.format(word2),
+                        2
+                    )
+                )
+            )[0]
+
+        else:
+            
+            print("Err: Read None")
         
     return data_entry
-
-    # return {
-    #     "Joint 1": 12.34,
-    #     "Joint 2": 12.34,
-    #     "Joint 3": 12.34,
-    #     "Joint 4": 12.34,
-    #     "Joint 5": 12.34,
-    #     "Joint 6": 12.34,
-    # }

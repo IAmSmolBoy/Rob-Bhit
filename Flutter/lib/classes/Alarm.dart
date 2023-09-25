@@ -44,9 +44,6 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
         ).toList()
       );
 
-  static AlarmNotifier fromMap(List<RobotAlarms> robotAlarms) =>
-    AlarmNotifier(robotAlarms);
-
   static AlarmNotifier fromjson(String jsonStr) {
 
     List decoded = (json.decode(jsonStr) as List)
@@ -71,7 +68,7 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
       )
       .toList();
 
-    return AlarmNotifier.fromMap(
+    return AlarmNotifier(
       decoded
         .map((e) => RobotAlarms.fromMap(e))
         .toList()

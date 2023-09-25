@@ -1,59 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:rob_bhit/Widgets/CardContent.dart';
 
 class HomeCard extends StatelessWidget {
 
   const HomeCard({
     super.key,
-    required this.image,
-    required this.title,
-    required this.subTitle,
-    required this.titleColor,
     required this.icon,
-    this.onTap,
+    required this.title,
+    required this.onTap,
+    required this.color
   });
 
-  final String image, title, subTitle;
-  final Color titleColor;
+  final String title;
+  final Color color;
   final IconData icon;
-  final void Function()? onTap;
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
 
-    final String imgURL = "images/$image.png";
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 10
+    return Container(
+      width: 60,
+      height: 80,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        color: colorScheme.background,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 3,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Card(
-          clipBehavior: Clip.antiAlias,
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8)
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Image.asset(
-                imgURL,
-                width: double.infinity,
-                fit: BoxFit.contain,
-              ),
-              CardContent(
-                title: title,
-                subtitle: subTitle,
-                titleColor: titleColor,
-                subtitleColor: Colors.grey,
-                icon: icon,
-              ),
-              Container(height: 5),
-            ],
-          ),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colorScheme.background,
+          padding: EdgeInsets.zero,
         ),
+        onPressed: onTap, 
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              icon,
+              color: color,
+              size: 40,
+            ),
+            Text(title,
+              style: TextStyle(
+                fontSize: 12, 
+                color: colorScheme.onBackground,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+          ]
+        )
       ),
     );
   }

@@ -27,8 +27,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  void toggleLightMode(value) {
 
-  // Settings
+    setState(() {
+
+
+      lightMode.set(value);
+
+    });
+
+    prefs.setBool("lightMode", value);
+
+  }
+
+  // Settings 
   int turnAlarm = prefs.getInt('turnAlarm') ?? 0;
 
   void setTurnAlarm(val) {
@@ -79,12 +91,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ],
           ),
           SettingsSection(
-            title: Text('Common'),
+            title: const Text('Common'),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: Icon(Icons.language),
-                title: Text('Language'),
-                value: Text('English'),
+                title: const Text('Language'),
+                value: const Text('English'),
                 onPressed:
                 (context) => fadeTo(
                   context: context,
@@ -96,10 +108,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
               SettingsTile.switchTile(
-                onToggle: toggle,
-                initialValue: test,
-                leading: Icon(Icons.format_paint),
-                title: Text('Enable custom theme'),
+                onToggle: toggleLightMode,
+                initialValue: lightMode.value,
+                leading: const Icon(Icons.light_mode),
+                title: const Text('Light Mode'),
               ),
             ],
           ),

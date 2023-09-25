@@ -3,6 +3,7 @@ import 'package:rob_bhit/Graphs/OEEBarGraph.dart';
 import 'package:rob_bhit/Graphs/OEEPieChart.dart';
 import 'package:rob_bhit/classes/AppColors.dart';
 import 'package:rob_bhit/classes/OEEData.dart';
+import 'package:rob_bhit/utils/helper.dart';
 
 class OEEScreen extends StatefulWidget {
   const OEEScreen({ super.key });
@@ -12,11 +13,6 @@ class OEEScreen extends StatefulWidget {
 }
 
 class _OEEScreenState extends State<OEEScreen> {
-
-  TextStyle chartTitleStyle = const TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 20
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +26,7 @@ class _OEEScreenState extends State<OEEScreen> {
           children: [
             Text(
               "OEE",
-              style: chartTitleStyle,
+              style: titleStyle,
             ),
             const OEEPieChart(
               oeeData: [
@@ -57,7 +53,7 @@ class _OEEScreenState extends State<OEEScreen> {
             const SizedBox(height: 40,),
             Text(
               "Productive Time",
-              style: chartTitleStyle,
+              style: titleStyle,
             ),
             const OEEBarGraph(
               data: [

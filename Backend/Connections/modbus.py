@@ -9,7 +9,7 @@ HOST = os.getenv("MODBUS_HOST")
 def connect_modbus():
     
     return ModbusClient(
-        host="0.0.0.0",
+        host=os.getenv("MODBUS_HOST"),
         auto_open=True
     )
 

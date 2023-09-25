@@ -4,6 +4,7 @@ from multiprocessing import Manager, Process
 import random
 from flask import Flask, jsonify, request
 from dotenv import load_dotenv
+from time import sleep
 
 load_dotenv()
 
@@ -34,37 +35,37 @@ from helper import *
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET'])
-def get():
-    return { 'hello': 'world'}
+# @app.route('/', methods=['GET'])
+# def get():
+#     return { 'hello': 'world'}
 
-@app.route('/login', methods=['POST'])
-def login():
+# @app.route('/login', methods=['POST'])
+# def login():
     
-    userCredentials = request.json
+#     userCredentials = request.json
 
-    user = users.find_one({
-        "email": userCredentials["email"],
-        "password": userCredentials["password"]
-    })
+#     user = users.find_one({
+#         "email": userCredentials["email"],
+#         "password": userCredentials["password"]
+#     })
     
-    if user == None:
-        return { "error": "Incorrect credentials" }
+#     if user == None:
+#         return { "error": "Incorrect credentials" }
 
-    return { "login": True }
+#     return { "login": True }
 
-@app.route('/register', methods=['POST'])
-def register():
+# @app.route('/register', methods=['POST'])
+# def register():
     
-    userCredentials = request.json
+#     userCredentials = request.json
 
-    user = users.find_one({ "email": userCredentials["email"] })
+#     user = users.find_one({ "email": userCredentials["email"] })
     
-    if user != None:
-        return { "error": "User with this email already exists" }
+#     if user != None:
+#         return { "error": "User with this email already exists" }
 
-    users.insert_one(userCredentials)
-    return { "message": "User registered sucessfully" }
+#     users.insert_one(userCredentials)
+#     return { "message": "User registered sucessfully" }
 
 # @app.route('/cnc', methods=['GET'])
 # def cnc():
@@ -76,22 +77,22 @@ def register():
 
 #     return list(data)
 
-@app.route('/current/<machine>', methods=['GET'])
-def current(machine):
-    match machine:
-        case "cnc":
-            data = HaasCNCData.find_one(
-                {},
-                { '_id': False },
-                sort=[( '_id', pymongo.DESCENDING )]
-            )
+# @app.route('/current/<machine>', methods=['GET'])
+# def current(machine):
+#     match machine:
+#         case "cnc":
+#             data = HaasCNCData.find_one(
+#                 {},
+#                 { '_id': False },
+#                 sort=[( '_id', pymongo.DESCENDING )]
+#             )
             
-            if data == None:
-                return { "error": "CNC data not found" }
+#             if data == None:
+#                 return { "error": "CNC data not found" }
 
-            return data
+#             return data
         
-        case "cobot":
+#         case "cobot":
 
             # return {
             #     "Joint 1": 0.0,
@@ -102,11 +103,11 @@ def current(machine):
             #     "Joint 6": 0.0
             # }
 
-            return jointsDB.find_one({}, { '_id': False })
+            # return jointsDB.find_one({}, { '_id': False })
 
-@app.route('/turns', methods=['GET'])
-def turns():
-    return turnsDB.find_one({}, { '_id': False })
+# @app.route('/turns', methods=['GET'])
+# def turns():
+#     return turnsDB.find_one({}, { '_id': False })
     # return {
     #     "abc": 0.0
     # }
@@ -117,9 +118,6 @@ def joints():
         "angles": jointsDB.find_one({}, { '_id': False }),
         "turns": turnsDB.find_one({}, { '_id': False })
     }
-    # return {
-    #     "abc": 0.0
-    # }
 
 @app.route('/reset-turns', methods=['POST'])
 def resetTurns():
@@ -138,10 +136,28 @@ def extractData():
     while True:
 
         prevJoints = jointsDB.find_one({}, { '_id': False })
-        temp = prevJoints.copy()
         turns = turnsDB.find_one({}, { '_id': False })
-        # newJoints = get_modbus_data()
 
+        # OmronCobot
+        # temp = get_modbus_data()
+
+        # for joint, angle in prevJoints.items():
+        #     if joint in temp:
+
+        #         turns[joint] += abs(temp[joint] - angle) / 360
+
+        #     else:
+
+        #         temp[joint] = angle / 360
+
+        # jointsDB.find_one_and_replace({}, temp)
+        # turnsDB.find_one_and_replace({}, turns)
+
+        # sleep(1)
+
+
+
+        temp = prevJoints.copy()
         for joint, angle in temp.items():
             temp[joint] = angle + random.random() * 10 - 5
 
@@ -153,12 +169,10 @@ def extractData():
         
 
         for joint, angle in prevJoints.items():
-            turns[joint] += abs(temp[joint] - prevJoints[joint])
+            turns[joint] += abs(temp[joint] - prevJoints[joint]) / 360
 
         jointsDB.find_one_and_replace({}, temp)
         turnsDB.find_one_and_replace({}, turns)
-
-        # OmronCobot
 
         sleep(1)
 

@@ -20,27 +20,28 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
 
-    final Color priColor = Theme.of(context).colorScheme.primary;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    Color appBarColor = color ?? colorScheme.primary;
 
     return AppBar(
       title: Text(title),
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.background,
       elevation: 5,
       iconTheme: IconThemeData(
-        color: color ?? priColor,
+        color: appBarColor,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
       titleTextStyle: TextStyle(
-        color: color ?? priColor,
+        color: appBarColor,
         fontWeight: FontWeight.bold,
         fontSize: 20
       ),
       leading: icon != null ?
         Icon(
           icon,
-          color: color ?? priColor
+          color: appBarColor
         ) :
         null,
       actions: settings ?
@@ -48,7 +49,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             icon: Icon(
               Icons.settings,
-              color: color ?? priColor
+              color: appBarColor
             ),
             onPressed: () {
               slideDownTo(

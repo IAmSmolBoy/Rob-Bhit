@@ -12,10 +12,10 @@ void main() async {
   prefs = await SharedPreferences.getInstance();
 
   getAlarms();
+  getJoints();
+  lightMode.set(prefs.getBool("lightMode") ?? true);
 
   runApp(const MyApp());
-
-  getJoints();
 
 }
 
@@ -26,14 +26,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(colorScheme: lightTheme),
-      darkTheme: ThemeData(colorScheme: darkTheme),
-      home: const ScreenManager(),
-      // home: const Test(),
-      // home: const TestStateful(),
+    return ValueListenableBuilder(
+      valueListenable: lightMode,
+      builder: (context, value, child) =>
+        MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            colorScheme: lightTheme,
+            scaffoldBackgroundColor: lightTheme.background
+          ),
+          darkTheme: ThemeData(
+            colorScheme: darkTheme,
+            scaffoldBackgroundColor: darkTheme.background
+          ),
+          themeMode: lightMode.theme,
+          home: const ScreenManager(),
+          // home: const Test(),
+          // home: const TestStateful(),
+        )
     );
+     
 
   }
 
@@ -46,10 +58,10 @@ ColorScheme lightTheme = const ColorScheme(
   background: Colors.white,
   surface: Colors.white,
   brightness: Brightness.light,
-  onPrimary: Colors.white,
-  onSecondary: Colors.white,
-  onError: Colors.white,
-  onBackground: AppColors.primary,
+  onPrimary: Colors.black,
+  onSecondary: Colors.black,
+  onError: Colors.black,
+  onBackground: Colors.black,
   onSurface: AppColors.primary
 );
 
@@ -57,12 +69,12 @@ ColorScheme darkTheme = const ColorScheme(
   primary: AppColors.primaryDark,
   secondary: AppColors.secondary,
   error: AppColors.red,
-  background: Colors.black,
-  surface: Colors.black,
+  background: Color(0xFF222222),
+  surface: Color(0xFF222222),
   brightness: Brightness.dark,
-  onPrimary: Colors.black,
-  onSecondary: Colors.black,
-  onError: Colors.black,
-  onBackground: AppColors.primaryDark,
+  onPrimary: Colors.white,
+  onSecondary: Colors.white,
+  onError: Colors.white,
+  onBackground: Colors.white,
   onSurface: AppColors.primaryDark
 );

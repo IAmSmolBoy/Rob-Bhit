@@ -1,12 +1,12 @@
 // ------------------- Imports -------------------
 import 'dart:convert';
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:rob_bhit/classes/AppColors.dart';
 import 'package:rob_bhit/classes/Joints.dart';
+import 'package:rob_bhit/classes/Theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../classes/Alarm.dart';
@@ -23,8 +23,13 @@ import '../classes/Alarm.dart';
 // ------------------- Variables -------------------
 late SharedPreferences prefs;
 Color color = AppColors.primary;
+LightModeNotifier lightMode = LightModeNotifier(true);
 JointNotifier joints = JointNotifier(const Joints([], []));
 AlarmNotifier alarms = AlarmNotifier([]);
+TextStyle titleStyle = const TextStyle(
+  fontWeight: FontWeight.bold,
+  fontSize: 20
+);
 
 
 
@@ -80,12 +85,6 @@ String? emailValidator(String? value) {
 }
 
 
-// Graph Functions
-Widget leftTitles(double value, TitleMeta meta) {
-  return Container();
-} 
-
-
 // Request Functions
 void getAlarms() async {
 
@@ -94,12 +93,12 @@ void getAlarms() async {
   if (alarmsjson == "") {
 
     List<Alarm> robotAlarms = [
-      const Alarm("Warning!", 800),
+      const Alarm("Warning!", 1),
       const Alarm("Alarm!", 900),
       const Alarm("Due for replacement!", 1000),
     ];
 
-    alarms = AlarmNotifier.fromMap([
+    alarms = AlarmNotifier([
       RobotAlarms('Cobot 001', robotAlarms),
       RobotAlarms('SCARA 01', robotAlarms),
       RobotAlarms('DELTA 01', robotAlarms),
@@ -126,70 +125,6 @@ void getAlarms() async {
   });
 
 }
-
-// Stream<Map<String, double>> getCobotData() async* {
-
-//   while (true) {
-
-//     Response response = await get(
-//       Uri(
-//         scheme: "http",
-//         host: dotenv.env['SERVERIP'],
-//         port: 5000,
-//         path: "/current/cobot"
-//       )
-//     );
-    
-//     Map body = json.decode(response.body);
-//     Map<String, double> data = body.map<String, double>((key, value) => MapEntry("$key", value));
-
-//     yield data;
-
-//     await Future.delayed(const Duration(seconds: 1));
-
-//   }
-
-// }
-
-// Stream<void> getJointDetails() async* {
-
-//   while (true) {
-
-//     Response response = await get(
-//       Uri(
-//         scheme: "http",
-//         host: dotenv.env['SERVERIP'],
-//         port: 5000,
-//         path: "/joints",
-//       )
-//     );
-    
-//     Map body = json.decode(response.body);
-
-//     print(body);
-    
-//     joints.set(
-//       Joints(
-//         body["angles"]
-//           .entries
-//           .map((MapEntry angle) => Angles(angle.key, angle.value))
-//           .toList(),
-//         body["turns"]
-//           .entries
-//           .map((MapEntry angle) => JointTurns(angle.key, angle.value))
-//           .toList()
-//       )
-//     );
-
-//     yield null;
-
-//     print(joints);
-
-//     await Future.delayed(const Duration(seconds: 1));
-
-//   }
-
-// }
 
 void getJoints() async {
   
