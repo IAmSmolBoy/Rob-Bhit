@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:rob_bhit/Screens/LoginScreen.dart';
 import 'package:rob_bhit/Screens/SettingsForm.dart';
 import 'package:rob_bhit/Widgets/AppBar.dart';
+import 'package:rob_bhit/classes/Alarm.dart';
+import 'package:rob_bhit/classes/AppColors.dart';
 import 'package:rob_bhit/utils/helper.dart';
 import 'package:rob_bhit/utils/navigation.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -40,13 +43,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   }
 
-  // Settings 
-  int turnAlarm = prefs.getInt('turnAlarm') ?? 0;
-
-  void setTurnAlarm(val) {
+  // Settings
+  void setWarningAlarm(double val) {
+    
     setState(() {
-      turnAlarm = val;
+      
+      alarms.editAlarm(
+        0,
+        0,
+        Alarm("Warning", val)
+      );
+      
     });
+    
+  }
+  void setAlarmAlarm(double val) {
+    
+    setState(() {
+      
+      alarms.editAlarm(
+        0,
+        1,
+        Alarm("Alarm", val)
+      );
+      
+    });
+    
+  }
+  void setDueAlarm(double val) {
+    
+    setState(() {
+      
+      alarms.editAlarm(
+        0,
+        2,
+        Alarm("Due for replacement", val)
+      );
+      
+    });
+    
   }
 
   @override
@@ -54,7 +89,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     
     return Scaffold(
       appBar: const MainAppBar(
-        title: "Settings"
+        title: "Settings",
+        settings: false,
       ),
       body: SettingsList(
         sections: [
@@ -62,57 +98,100 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text('Robot'),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
-                leading: const Icon(Icons.replay_circle_filled_outlined),
-                title: const Text('Turns Alarm'),
-                value: Text('$turnAlarm'),
+                leading: const Icon(Icons.warning, color: AppColors.oeeBar3),
+                title: Text('${alarms.value[0].alarms[0].msg} Alarm'),
+                value: Text('${alarms.value[0].alarms[0].turns}'),
                 onPressed:
                   (context) => fadeTo(
                     context: context,
                     screen: SettingsForm(
-                      labelText: "Turns Alarm",
-                      prefixIcon: Icons.replay_circle_filled_outlined,
+                      labelText: "${alarms.value[0].alarms[0].msg} Alarm",
+                      prefixIcon: Icons.warning,
                       keyboard: TextInputType.number,
-                      currVal: "$turnAlarm",
-                      set: (val) {
-                        final int submittedVal = int.tryParse(val) ?? 0;
-
-                        setTurnAlarm(submittedVal);
-                        prefs.setInt("turnAlarm", submittedVal);
+                      currVal: "${alarms.value[0].alarms[0].turns}",
+                      set: (String? val) {
+                        setWarningAlarm(double.tryParse(val ?? "0.0") ?? 0.0);
                       },
                     )
                   ),
               ),
-              SettingsTile.switchTile(
-                onToggle: toggle,
-                initialValue: test,
-                leading: Icon(Icons.format_paint),
-                title: Text('Enable custom theme'),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.warning, color: AppColors.darkOrange),
+                title: Text('${alarms.value[0].alarms[1].msg} Alarm'),
+                value: Text('${alarms.value[0].alarms[1].turns}'),
+                onPressed:
+                  (context) => fadeTo(
+                    context: context,
+                    screen: SettingsForm(
+                      labelText: "${alarms.value[0].alarms[1].msg} Alarm",
+                      prefixIcon: Icons.warning,
+                      keyboard: TextInputType.number,
+                      currVal: "${alarms.value[0].alarms[1].turns}",
+                      set: (String? val) {
+                        setAlarmAlarm(double.tryParse(val ?? "0.0") ?? 0.0);
+                      },
+                    )
+                  ),
+              ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.warning, color: AppColors.red),
+                title: Text('${alarms.value[0].alarms[2].msg} Alarm'),
+                value: Text('${alarms.value[0].alarms[2].turns}'),
+                onPressed:
+                  (context) => fadeTo(
+                    context: context,
+                    screen: SettingsForm(
+                      labelText: "${alarms.value[0].alarms[2].msg} Alarm",
+                      prefixIcon: Icons.warning,
+                      keyboard: TextInputType.number,
+                      currVal: "${alarms.value[0].alarms[2].turns}",
+                      set: (String? val) {
+                        setDueAlarm(double.tryParse(val ?? "0.0") ?? 0.0);
+                      },
+                    )
+                  ),
               ),
             ],
           ),
           SettingsSection(
             title: const Text('Common'),
             tiles: <SettingsTile>[
-              SettingsTile.navigation(
-                leading: Icon(Icons.language),
-                title: const Text('Language'),
-                value: const Text('English'),
-                onPressed:
-                (context) => fadeTo(
-                  context: context,
-                  screen: SettingsForm(
-                    set: (val) => prefs.setInt("", val),
-                    labelText: "",
-                    prefixIcon: Icons.circle
-                  )
-                ),
-              ),
               SettingsTile.switchTile(
                 onToggle: toggleLightMode,
                 initialValue: lightMode.value,
                 leading: const Icon(Icons.light_mode),
                 title: const Text('Light Mode'),
               ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.wifi),
+                title: const Text("Server IP"),
+                onPressed: 
+                  (context) => fadeTo(
+                    context: context,
+                    screen: SettingsForm(
+                      labelText: "ServerIP",
+                      prefixIcon: Icons.wifi,
+                      keyboard: TextInputType.text,
+                      currVal: serverIP.value,
+                      set: (String? val) {
+
+                        serverIP.set(val ?? "0.0.0.0");
+
+                      },
+                    )
+                  ),
+              ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.exit_to_app),
+                title: const Text("Sign Out"),
+                onPressed: (context) {
+
+                  prefs.remove("user");
+
+                  slideReplacementDownTo(context: context, screen: const LoginScreen());
+
+                },
+              )
             ],
           ),
         ],

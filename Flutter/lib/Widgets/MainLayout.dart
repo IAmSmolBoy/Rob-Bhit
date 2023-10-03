@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rob_bhit/Screens/ChatScreen.dart';
+import 'package:rob_bhit/Screens/ChatPage.dart';
 import 'package:rob_bhit/Screens/Home.dart';
 import 'package:rob_bhit/Widgets/AppBar.dart';
 import 'package:rob_bhit/Widgets/BottomNavbar.dart';
@@ -80,7 +80,10 @@ class MainLayout extends StatelessWidget {
             ],
           ),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatScreen()));
+            slideUpTo(
+              context: context,
+              screen: ChatPage()
+            );
           }
         ),
       )

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:rob_bhit/utils/helper.dart';
 
 class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
 
@@ -10,6 +11,15 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
 
     super.value
       .add(newValue);
+    
+    prefs.setString("alarms", json.encode(
+      super.value
+        .map(
+          (RobotAlarms robotAlarms) =>
+            robotAlarms.tojson()
+        ).toList()
+      )
+    );
   
   }
 
@@ -17,6 +27,15 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
 
     super.value
       .removeAt(index);
+    
+    prefs.setString("alarms", json.encode(
+      super.value
+        .map(
+          (RobotAlarms robotAlarms) =>
+            robotAlarms.tojson()
+        ).toList()
+      )
+    );
   
   }
 
@@ -24,6 +43,15 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
 
     super.value[robotIndex]
       .add(newValue);
+    
+    prefs.setString("alarms", json.encode(
+      super.value
+        .map(
+          (RobotAlarms robotAlarms) =>
+            robotAlarms.tojson()
+        ).toList()
+      )
+    );
   
   }
 
@@ -32,6 +60,30 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
 
     super.value[robotIndex]
       .remove(alarmIndex);
+    
+    prefs.setString("alarms", json.encode(
+      super.value
+        .map(
+          (RobotAlarms robotAlarms) =>
+            robotAlarms.tojson()
+        ).toList()
+      )
+    );
+  
+  }
+
+  void editAlarm(int robotIndex, int alarmIndex, Alarm newValue) {
+
+    super.value[robotIndex].alarms[alarmIndex] = newValue;
+  
+  prefs.setString("alarms", json.encode(
+      super.value
+        .map(
+          (RobotAlarms robotAlarms) =>
+            robotAlarms.tojson()
+        ).toList()
+      )
+      );
   
   }
 

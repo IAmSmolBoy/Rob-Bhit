@@ -52,7 +52,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               color: appBarColor
             ),
             onPressed: () {
-              slideDownTo(
+              slideUpTo(
                 context: context,
                 screen: const SettingsScreen()
               );

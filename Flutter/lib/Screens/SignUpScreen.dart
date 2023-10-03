@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:rob_bhit/ScreenManager.dart';
 import 'package:rob_bhit/Widgets/LoginLayout.dart';
 import 'package:rob_bhit/Widgets/SignUpButton.dart';
 import 'package:rob_bhit/Widgets/MainTextField.dart';
+import 'package:rob_bhit/classes/User.dart';
 import 'package:rob_bhit/utils/helper.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -45,27 +48,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void signUp() {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState!.save();
-
-      String body = json.encode({
-        "name": name,
-        "email": email,
-        "password": password
-      });
+      
+      User user = User(
+        name: name,
+        email: email,
+        password: password
+      );
 
       post(
-        Uri.parse("http://10.0.2.2:5000/register"),
-        body: body,
+        Uri.parse("http://${serverIP.value}:5000/register"),
+        body: user.toJson(),
         headers: { "Content-Type": "application/json" }
       ).then((res) {
 
         Map body = json.decode(res.body);
 
         if (body.containsKey("error")) {
+
           setState(() {
+
             error = body["error"]!;
+
           });
+
         }
         else if (body.containsKey("message")) {
+
+          prefs.setString("user", user.toJson());
+
+          Navigator.push(context, PageTransition(
+            child: const ScreenManager(),
+            type: PageTransitionType.fade
+          ));
           
         }
       });
@@ -87,6 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       screenSize: screenSize,
       formKey: _formKey,
       error: error,
+      title: "Sign Up",
       children: [
         MainTextField(
           labelText: "Name",

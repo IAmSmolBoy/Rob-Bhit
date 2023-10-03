@@ -1,1 +1,7 @@
 .env
+Dockerfile
+docker-compose.yml
+docker-compose.debug.yml
+
+test
+revamp

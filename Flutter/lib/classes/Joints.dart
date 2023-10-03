@@ -5,7 +5,9 @@ class JointNotifier extends ValueNotifier<Joints> {
   JointNotifier(super.value);
 
   void set(Joints newValue) {
+
     super.value = newValue;
+
   }
 
 }

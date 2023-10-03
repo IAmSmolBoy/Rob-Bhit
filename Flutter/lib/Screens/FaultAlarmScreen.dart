@@ -156,6 +156,8 @@ class _FaultAlarmScreenState extends State<FaultAlarmScreen> {
 
               for (Alarm alarm in robot.alarms.reversed) {
 
+                print("${joint.turns}, ${alarm.msg} ${alarm.turns}");
+
                 if (alarm.turns < joint.turns && !alarmed) {
 
                   notificationWidgets.add(

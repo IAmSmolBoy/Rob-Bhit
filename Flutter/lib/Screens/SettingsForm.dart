@@ -12,7 +12,7 @@ class SettingsForm extends StatefulWidget {
     this.currVal
   });
 
-  final void Function(dynamic value) set;
+  final void Function(String? value) set;
   final String labelText;
   final IconData prefixIcon;
   final TextInputType? keyboard;

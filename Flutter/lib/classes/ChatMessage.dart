@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rob_bhit/classes/AppColors.dart';
 
 class ChatMessage extends StatelessWidget {
   const ChatMessage(

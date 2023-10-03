@@ -6,7 +6,7 @@ class LoginButton extends StatelessWidget {
     super.key,
     required this.side,
     required this.fixedSize,
-    this.onClick
+    required this.onClick
   });
 
   final BorderSide side;

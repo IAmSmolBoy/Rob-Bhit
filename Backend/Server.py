@@ -1,7 +1,8 @@
 # Dependencies
-import json
-from multiprocessing import Manager, Process
 import random
+import os
+import openai
+from multiprocessing import Manager, Process
 from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 from time import sleep
@@ -11,13 +12,14 @@ load_dotenv()
 # Mongo
 import pymongo
 
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+client = pymongo.MongoClient(os.getenv("MONGODB_URI"))
 mongoDB = client["Siemens_Competition"]
 
 HaasCNCData = mongoDB["Haas_Machine_Data"]
 OmronCobot = mongoDB["Omron_Cobot"]
 jointsDB = mongoDB["Joints"]
 turnsDB = mongoDB["Turns"]
+messagesDB = mongoDB["Messages"]
 users = mongoDB["Users"]
 
 # get Ip Addr
@@ -34,38 +36,13 @@ from helper import *
 
 
 app = Flask(__name__)
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# @app.route('/', methods=['GET'])
-# def get():
-#     return { 'hello': 'world'}
-
-# @app.route('/login', methods=['POST'])
-# def login():
-    
-#     userCredentials = request.json
-
-#     user = users.find_one({
-#         "email": userCredentials["email"],
-#         "password": userCredentials["password"]
-#     })
-    
-#     if user == None:
-#         return { "error": "Incorrect credentials" }
-
-#     return { "login": True }
-
-# @app.route('/register', methods=['POST'])
-# def register():
-    
-#     userCredentials = request.json
-
-#     user = users.find_one({ "email": userCredentials["email"] })
-    
-#     if user != None:
-#         return { "error": "User with this email already exists" }
-
-#     users.insert_one(userCredentials)
-#     return { "message": "User registered sucessfully" }
+@app.route('/ping', methods=['GET'])
+def get():
+    return {
+        "message": "pong"
+    }
 
 # @app.route('/cnc', methods=['GET'])
 # def cnc():
@@ -77,40 +54,30 @@ app = Flask(__name__)
 
 #     return list(data)
 
-# @app.route('/current/<machine>', methods=['GET'])
-# def current(machine):
-#     match machine:
-#         case "cnc":
-#             data = HaasCNCData.find_one(
-#                 {},
-#                 { '_id': False },
-#                 sort=[( '_id', pymongo.DESCENDING )]
-#             )
-            
-#             if data == None:
-#                 return { "error": "CNC data not found" }
+@app.route('/login', methods=['POST'])
+def login():
 
-#             return data
-        
-#         case "cobot":
+    user = users.find_one({
+        "email": request.json["email"],
+        "password": request.json["password"]
+    }, { '_id': False })
+    
+    if user == None:
+        return { "error": "Incorrect credentials" }
 
-            # return {
-            #     "Joint 1": 0.0,
-            #     "Joint 2": 0.0,
-            #     "Joint 3": 0.0,
-            #     "Joint 4": 0.0,
-            #     "Joint 5": 0.0,
-            #     "Joint 6": 0.0
-            # }
+    return user
 
-            # return jointsDB.find_one({}, { '_id': False })
+@app.route('/register', methods=['POST'])
+def register():
+    
+    user = users.find_one({ "email": request.json["email"] }, { '_id': False })
+    
+    if user != None:
+        return { "error": "User with this email already exists" }
 
-# @app.route('/turns', methods=['GET'])
-# def turns():
-#     return turnsDB.find_one({}, { '_id': False })
-    # return {
-    #     "abc": 0.0
-    # }
+    users.insert_one(request.json)
+
+    return { "message": "User registered sucessfully" }
 
 @app.route('/joints', methods=['GET'])
 def joints():
@@ -129,14 +96,48 @@ def resetTurns():
         "Joint 5": 0.0,
         "Joint 6": 0.0,
     })
-    return {}
+    return {
+        "message": "Successful"
+    }
+
+@app.route('/messages', methods=['GET'])
+def messages():
+    
+    return jsonify(list(messagesDB.find({}, { '_id': False })))
+
+@app.route('/send-message', methods=['POST'])
+def sendMessage():
+    messagesDB.insert_one(request.json)
+    return {} 
 
 def extractData():
 
-    while True:
+    print(os.getenv("MONGODB_URI"))
 
-        prevJoints = jointsDB.find_one({}, { '_id': False })
-        turns = turnsDB.find_one({}, { '_id': False })
+    while True:
+        
+        try:
+            prevJoints = jointsDB.find_one({}, { '_id': False })
+            turns = turnsDB.find_one({}, { '_id': False })
+        except:
+            prevJoints = {
+                "Joint 1": 0.0,
+                "Joint 2": 0.0,
+                "Joint 3": 0.0,
+                "Joint 4": 0.0,
+                "Joint 5": 0.0,
+                "Joint 6": 0.0,
+            }
+            turns = {
+                "Joint 1": 0.0,
+                "Joint 2": 0.0,
+                "Joint 3": 0.0,
+                "Joint 4": 0.0,
+                "Joint 5": 0.0,
+                "Joint 6": 0.0,
+            }
+            jointsDB.insert_one(prevJoints)
+            turns.insert_one(turns)
 
         # OmronCobot
         # temp = get_modbus_data()
@@ -153,7 +154,7 @@ def extractData():
         # jointsDB.find_one_and_replace({}, temp)
         # turnsDB.find_one_and_replace({}, turns)
 
-        # sleep(1)
+        # sleep(0.5)
 
 
 
@@ -181,7 +182,7 @@ if __name__ == '__main__':
 
     extract = Process(target=extractData)
     extract.start()
+    # app.run()
     app.run(debug=True)
     
     # app.run(debug=True, host=IPAddr)
-    

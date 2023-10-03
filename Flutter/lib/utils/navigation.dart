@@ -74,7 +74,7 @@ Future<T?> slideLeftTo<T>({
   )
 );
 
-Future<T?> slideDownTo<T>({
+Future<T?> slideUpTo<T>({
   required BuildContext context,
   required Widget screen,
 }) => Navigator.push(
@@ -83,4 +83,27 @@ Future<T?> slideDownTo<T>({
     child: screen,
     type: PageTransitionType.bottomToTop
   )
+);
+
+Future<T?> slideDownTo<T>({
+  required BuildContext context,
+  required Widget screen,
+}) => Navigator.push(
+  context,
+  PageTransition(
+    child: screen,
+    type: PageTransitionType.topToBottom
+  )
+);
+
+Future<T?> slideReplacementDownTo<T>({
+  required BuildContext context,
+  required Widget screen,
+}) => Navigator.pushAndRemoveUntil(
+  context,
+  PageTransition(
+    child: screen,
+    type: PageTransitionType.topToBottom,
+  ),
+  (route) => false,
 );

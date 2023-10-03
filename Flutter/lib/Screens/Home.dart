@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rob_bhit/Widgets/ChatWindow.dart';
 import 'package:rob_bhit/Widgets/HomeCard.dart';
-import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
+import 'package:rob_bhit/classes/Alarm.dart';
+import 'package:rob_bhit/classes/HealthStatus.dart';
+import 'package:rob_bhit/classes/Joints.dart';
 import 'package:rob_bhit/utils/helper.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 // import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../classes/AppColors.dart';
@@ -21,25 +22,7 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-//Health status for joints class
-// class HealthStatus {
-//   final double jointHealth;
-//   final String jointNo;
-//   final Color colorStatus;
-//   HealthStatus(this.jointHealth, this.jointNo, this.colorStatus);
-// }
-
 class _HomeState extends State<Home> {
-
-  //simulated joints health status data
-  // final List<HealthStatus> healthStatus = <HealthStatus> [
-  //   HealthStatus(90, 'Joint 6', Colors.blue),
-  //   HealthStatus(93, 'Joint 5', Colors.red),
-  //   HealthStatus(95, 'Joint 4', Colors.green),
-  //   HealthStatus(82, 'Joint 3', Colors.yellow),
-  //   HealthStatus(85, 'Joint 2', Colors.purple),
-  //   HealthStatus(88, 'Joint 1', Colors.orange)
-  // ];
 
   // final TextEditingController _controller = TextEditingController();
   // final List<ChatMessage> _messages = [];
@@ -138,13 +121,50 @@ class _HomeState extends State<Home> {
   //   );
   // }
 
-  final _navigationHeaderKey = GlobalKey();
-  final _rowKey = GlobalKey();
+  // Home Screen Graph
+  List<HealthStatus> healthStatus = []; 
+  List<Map<String, Color>> jointDataList = [
+    { 'Joint 6': Colors.blue },
+    { 'Joint 5': Colors.red },
+    { 'Joint 4': Colors.green },
+    { 'Joint 3': Colors.yellow },
+    { 'Joint 2': Colors.purple },
+    { 'Joint 1': Colors.orange }
+  ];
+  List<Alarm> cobotAlarms = alarms.value[0].alarms;
 
-  double navigationHeight() => (_navigationHeaderKey.currentContext?.size?.height ?? 0);
-  double rowHeight() => (_navigationHeaderKey.currentContext?.size?.height ?? 0);
+  List<HealthStatus> setHealth(Joints joints) {
+    
+    List<JointTurns> cobotJointTurns = joints.turns;
+    
+    return jointDataList.map(
+      (joint) {
 
-  List<String> messages = [];
+        MapEntry<String, Color> jointData = joint.entries.toList()[0];
+        int index = int.parse(jointData.key[6]) - 1;
+        double dueForReplacementAlarm = cobotAlarms[cobotAlarms.length - 1].turns;
+        double health = 0.0;
+
+        if (index < cobotJointTurns.length) {
+
+          health = (dueForReplacementAlarm - cobotJointTurns[index].turns) / 100;
+
+        }
+        
+        if (health < 0) {
+          health = 0;
+        }
+
+        return HealthStatus(
+          health,
+          jointData.key,
+          jointData.value
+        );
+
+      }
+    ).toList();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,12 +188,10 @@ class _HomeState extends State<Home> {
             //Home buttons
             Text(
               "Navigation",
-              key: _navigationHeaderKey,
               style: titleStyle,
             ),
             Container(height: 20,),
             Row(
-              key: _rowKey,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 HomeCard(
@@ -211,40 +229,43 @@ class _HomeState extends State<Home> {
               ],
             ),
             Container(height: 20,),
-            //                                   Chatbot
-            ChatWindow(
-              screenSize: screenSize,
-              messages: messages,
-            ),
-
-            //                                   ToDo: Implement ChatGPT
 
             //                                   Robot health graph(s)
-            // Container(
-            //   margin: const EdgeInsets.only(top: 30),
-            //   child: SfCartesianChart(
-            //     primaryXAxis: CategoryAxis(),
-            //     primaryYAxis: NumericAxis(
-            //       title: AxisTitle(
-            //         text: 'Health Status (%)',
-            //         textStyle: const TextStyle(
-            //           fontWeight: FontWeight.bold,
-            //         ),
-            //         alignment: ChartAlignment.center
-            //       )
-            //     ),
-            //     series: <ChartSeries>[
-            //       BarSeries<HealthStatus, String>(
-            //         dataSource: healthStatus,
-            //         xValueMapper: (HealthStatus status, _) => status.jointNo,
-            //         yValueMapper: (HealthStatus status, _) => status.jointHealth,
-            //         pointColorMapper: (HealthStatus status, _) => status.colorStatus,
-            //         width: 0.6
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            
+            ValueListenableBuilder(
+              valueListenable: joints,
+              builder: (context, value, child) {
+
+                healthStatus = setHealth(value);
+
+                return Container(
+                  margin: const EdgeInsets.only(top: 30),
+                  child: SfCartesianChart(
+                    primaryXAxis: CategoryAxis(),
+                    primaryYAxis: NumericAxis(
+                      title: AxisTitle(
+                        text: 'Health Status (%)',
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        alignment: ChartAlignment.center
+                      )
+                    ),
+                    series: <ChartSeries>[
+                      BarSeries<HealthStatus, String>(
+                        dataSource: healthStatus,
+                        xValueMapper: (HealthStatus status, _) => status.jointNo,
+                        yValueMapper: (HealthStatus status, _) => status.jointHealth,
+                        pointColorMapper: (HealthStatus status, _) => status.colorStatus,
+                        width: 0.6,
+                        animationDuration: 0,
+                        animationDelay: 0
+                      ),
+                    ],
+                  ),
+                );
+
+              }
+            ),
           ],
         ),
       ) 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rob_bhit/Widgets/AppBar.dart';
 
 class LoginLayout extends StatefulWidget {
 
@@ -7,13 +8,14 @@ class LoginLayout extends StatefulWidget {
     required this.screenSize,
     required this.formKey,
     required this.children,
-    required this.error
+    required this.error,
+    required this.title
   });
 
   final Size screenSize;
   final GlobalKey<FormState> formKey;
   final List<Widget> children;
-  final String error;
+  final String error, title;
 
   @override
   State<LoginLayout> createState() => _LoginLayoutState();
@@ -34,13 +36,16 @@ class _LoginLayoutState extends State<LoginLayout> {
 
     return Scaffold(
       backgroundColor: backgroundColor,
+      appBar: MainAppBar(
+        title: widget.title
+      ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: SingleChildScrollView(
           child: Padding(
             padding: padding,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Padding(
                   padding: padding,

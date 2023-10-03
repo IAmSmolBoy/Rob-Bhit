@@ -1,15 +1,17 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:rob_bhit/Screens/OEEScreen.dart';
+import 'package:rob_bhit/ScreenManager.dart';
 import 'package:rob_bhit/Screens/SignUpScreen.dart';
 import 'package:rob_bhit/Widgets/LoginButton.dart';
 import 'package:rob_bhit/Widgets/LoginLayout.dart';
 import 'package:rob_bhit/Widgets/SignUpButton.dart';
 import 'package:rob_bhit/Widgets/MainTextField.dart';
+import 'package:rob_bhit/classes/User.dart';
 import 'package:rob_bhit/utils/helper.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -26,6 +28,9 @@ class _LoginScreenState extends State<LoginScreen> {
   // Password Visibility
   bool visible = false;
   void toggleVisibility() {
+
+    print("test");
+
     setState(() {
       visible = !visible;
     });
@@ -39,31 +44,43 @@ class _LoginScreenState extends State<LoginScreen> {
   String error = "";
   
   void login() {
+
+    log('${serverIP.value}');
+
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState!.save();
 
       try {
+
         post(
-          Uri.parse("http://10.0.2.2:5000/login"),
+          Uri.parse("http://${serverIP.value}:5000/login"),
+          headers: { "Content-Type": "application/json" },
           body: json.encode({
             "email": email,
             "password": password
           }),
-          headers: { "Content-Type": "application/json" }
         ).then((res) {
 
           Map body = json.decode(res.body);
 
           if (body.containsKey("error")) {
+
             setState(() {
+
               error = body["error"]!;
+
             });
+
           }
-          else if (body.containsKey("login")) {
+          else if (body.containsKey("name")) {
+
+            prefs.setString("user", User.fromJson(res.body).toJson());
+
             Navigator.push(context, PageTransition(
-              child: const OEEScreen(),
+              child: const ScreenManager(),
               type: PageTransitionType.fade
             ));
+
           }
 
         });
@@ -89,6 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
       formKey: _formKey,
       screenSize: screenSize,
       error: error,
+      title: "Login",
       children: [
         MainTextField(
           labelText: "Email",

@@ -20,7 +20,7 @@ class ChatWindow extends StatefulWidget {
 
 class _ChatWindowState extends State<ChatWindow> {
 
-  final TextEditingController _controller = TextEditingController();
+  // final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,9 @@ class _ChatWindowState extends State<ChatWindow> {
                     ),
                     child: Row(
                       children: [
-                        TextField()
+                        // TextField(
+                        //   controller: _controller,
+                        // )
                       ]
                     ),
                   ),
