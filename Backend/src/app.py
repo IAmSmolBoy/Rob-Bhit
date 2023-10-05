@@ -1,13 +1,11 @@
-import os
 import json
-import sys
 from flask import Flask, jsonify, request
 # from flask_pymongo import PyMongo
 from bson import json_util
 import pymongo
-from Classes.joints import Joint
 
-MONGODB_URI = os.environ.get("MONGODB_ENDPOINT")
+MONGODB_URI = "mongodb://db:27017/example"
+# MONGODB_URI = os.environ.get("MONGODB_ENDPOINT")
 
 app = Flask(__name__)
 
