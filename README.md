@@ -7,9 +7,9 @@ Rob-Bhit is a phone app that I developed to be used with an Industrial Edge Devi
 
 ## 🌐 Technologies
 
-- ![Flutter](assets/md/image.png) Flutter
-- ![Python](assets/md/image-1.png) Python
-- ![Flask](assets/md/image-2.png) Flask
+- Flutter
+- Python
+- Flask
 
 ## ✨ Features
 
