@@ -51,7 +51,7 @@ flutter build apk --release
 
 You will find an apk file in the path. Rob-Bhit/Frontend/build/app/outputs/apk/release/app-release.apk.
 <p>app-release.apk is an apk file that can be downloaded and installed onto an Android phone.</p>
-When you enter Rob-Bhit, go to settings and you will have to enter in the ip you saw after running ipconfig.
+<p>When you enter Rob-Bhit, go to settings and you will have to enter in the ip you saw after running ipconfig.</p>
 
 
 <style>
