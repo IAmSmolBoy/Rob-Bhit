@@ -53,9 +53,4 @@ You will find an apk file in the path. Rob-Bhit/Frontend/build/app/outputs/apk/r
 <p>app-release.apk is an apk file that can be downloaded and installed onto an Android phone.</p>
 <p>When you enter Rob-Bhit, go to settings and you will have to enter in the ip you saw after running ipconfig.</p>
 
-
-<style>
-    img[alt=Flutter], img[alt=Python], img[alt=Flask] { width: 1rem; }
-    h1#title { border: 0 }
-    h3#subtitle { border-bottom: solid 1px gray; padding-bottom: 1vh; }
-</style>
+<link rel=“stylesheet” type=“text/css” href=”assets/md/styles.css”>
