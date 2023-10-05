@@ -15,6 +15,7 @@ void main() async {
 
   getAlarms();
   lightMode.set(prefs.getBool("lightMode") ?? true);
+  serverIP.set(prefs.getString("serverIP") ?? "0.0.0.0");
 
   runApp(const MyApp());
 
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
       valueListenable: serverIP,
       builder: (context, value, child) {
 
-        return StreamBuilder<Joints>(
+        return StreamBuilder<List<Joint>>(
           stream: getJoints(value),
           builder: (context, snapshot) {
 
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
 
             else if (snapshot.hasData) {
 
-              joints.set(snapshot.data!);
+              joints.setList(snapshot.data!);
 
             }
 

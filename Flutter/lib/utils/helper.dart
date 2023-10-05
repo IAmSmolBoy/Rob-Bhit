@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:rob_bhit/classes/AppColors.dart';
 import 'package:rob_bhit/classes/IPNotifier.dart';
@@ -23,17 +22,25 @@ import '../classes/Alarm.dart';
 
 
 // ------------------- Variables -------------------
-IPNotifier serverIP = IPNotifier(dotenv.env['SERVERIP'] ?? "0.0.0.0");
+IPNotifier serverIP = IPNotifier("0.0.0.0");
 late SharedPreferences prefs;
 Color color = AppColors.primary;
 LightModeNotifier lightMode = LightModeNotifier(true);
-JointNotifier joints = JointNotifier(const Joints([], []));
+JointNotifier joints = JointNotifier([]);
 AlarmNotifier alarms = AlarmNotifier([]);
 TextStyle titleStyle = const TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 20
 );
 List<Message> messages = [];
+List<Color> jointColors = [
+  Colors.orange,
+  Colors.purple,
+  Colors.yellow,
+  Colors.green,
+  Colors.red,
+  Colors.blue,
+];
 
 
 
@@ -126,7 +133,7 @@ void getAlarms() async {
 
 }
 
-Stream<Joints> getJoints(String ip) async* {
+Stream<List<Joint>> getJoints(String ip) async* {
   
   while (true) {
 
@@ -139,20 +146,21 @@ Stream<Joints> getJoints(String ip) async* {
       )
     );
     
-    Map body = json.decode(response.body);
-    Map<String, double> angles = (body["angles"] as Map).map((key, value) => MapEntry("$key", value.toDouble()));
-    Map<String, double> turns = (body["turns"] as Map).map((key, value) => MapEntry("$key", value.toDouble()));
+    List body = json.decode(response.body) as List;
+    List<Joint> jointList = body
+      .asMap()
+      .map(
+        (i, jointData) => MapEntry(
+          i,
+          Joint.fromMap(i, jointData)
+        )
+      )
+      .values
+      .toList();
 
-    yield Joints(
-      angles
-        .entries
-        .map<Angles>((MapEntry<String, double> angle) => Angles(angle.key, angle.value))
-        .toList(),
-      turns
-        .entries
-        .map<JointTurns>((MapEntry<String, double> angle) => JointTurns(angle.key, angle.value))
-        .toList()
-    );
+    // log("._. :) ------------------------------ ${jointList.map((e) => e.toJson()).toString()}");
+
+    yield jointList;
 
     await Future.delayed(const Duration(seconds: 1));
 

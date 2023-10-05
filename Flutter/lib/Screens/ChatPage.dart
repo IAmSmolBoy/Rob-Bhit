@@ -46,6 +46,9 @@ class _ChatPageState extends State<ChatPage> {
         showUserAvatars: true,
         showUserNames: true,
         user: chatHelper.user,
+        typingIndicatorOptions: TypingIndicatorOptions(
+          typingUsers: chatHelper.typingUsers
+        )
       )
     );
   

@@ -122,47 +122,42 @@ class _HomeState extends State<Home> {
   // }
 
   // Home Screen Graph
-  List<HealthStatus> healthStatus = []; 
-  List<Map<String, Color>> jointDataList = [
-    { 'Joint 6': Colors.blue },
-    { 'Joint 5': Colors.red },
-    { 'Joint 4': Colors.green },
-    { 'Joint 3': Colors.yellow },
-    { 'Joint 2': Colors.purple },
-    { 'Joint 1': Colors.orange }
-  ];
+  List<HealthStatus> healthStatus = [];
   List<Alarm> cobotAlarms = alarms.value[0].alarms;
 
-  List<HealthStatus> setHealth(Joints joints) {
+  List<HealthStatus> setHealth(List<Joint> jointList) {
     
-    List<JointTurns> cobotJointTurns = joints.turns;
-    
-    return jointDataList.map(
-      (joint) {
+    return jointList
+      .asMap()
+      .map(
+        (i, joint) {
+          
+          double dueForReplacementAlarm = cobotAlarms[cobotAlarms.length - 1].turns;
+          double health = 0.0;
 
-        MapEntry<String, Color> jointData = joint.entries.toList()[0];
-        int index = int.parse(jointData.key[6]) - 1;
-        double dueForReplacementAlarm = cobotAlarms[cobotAlarms.length - 1].turns;
-        double health = 0.0;
+          if (i < jointList.length) {
 
-        if (index < cobotJointTurns.length) {
+            health = (dueForReplacementAlarm - jointList[i].turns) / 100;
 
-          health = (dueForReplacementAlarm - cobotJointTurns[index].turns) / 100;
+          }
+          
+          if (health < 0) {
+            health = 0;
+          }
+
+          return MapEntry(
+            i,
+            HealthStatus(
+              health,
+              "Joint ${joint.jointNo}",
+              joint.color
+            )
+          );
 
         }
-        
-        if (health < 0) {
-          health = 0;
-        }
-
-        return HealthStatus(
-          health,
-          jointData.key,
-          jointData.value
-        );
-
-      }
-    ).toList();
+      )
+      .values
+      .toList();
 
   }
 

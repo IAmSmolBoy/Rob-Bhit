@@ -24,6 +24,7 @@ class ChatHelper {
     "How are you feeling?",
     "Show diagnostic options"
   ];
+  List<User> typingUsers = [];
 
   ChatHelper(this.setState);
 
@@ -43,6 +44,7 @@ class ChatHelper {
     setState(() {
 
       messages.insert(0, message);
+      typingUsers = [];
 
     });
   
@@ -112,8 +114,7 @@ class ChatHelper {
     double health = (
       joints
         .value
-        .turns
-        .map((e) => e.turns)
+        .map((joint) => joint.turns)
         .reduce((value, element) => value + element)
       ) / 6;
 
@@ -128,16 +129,18 @@ class ChatHelper {
         case 1:
           response = joints
             .value
-            .angles
-            .map((e) => "${e.joint}: ${e.angle}°")
+            .asMap()
+            .map((i, joint) => MapEntry(i, "Joint $i: ${joint.angle}°"))
+            .values
             .join("\n");
           break;
 
         case 2:
           response = joints
             .value
-            .turns
-            .map((e) => "${e.joint}: ${e.turns}")
+            .asMap()
+            .map((i, joint) => MapEntry(i, "Joint $i: ${joint.turns}turns"))
+            .values
             .join("\n");
           break;
 
@@ -146,25 +149,28 @@ class ChatHelper {
           response = "";
           int i = 1;
 
-          for (JointTurns joint in joints.value.turns) {
+          for (Joint joint in joints.value) {
+
+            String condition = "";
 
             for (Alarm alarm in alarms.value[0].alarms.reversed) {
 
               if (joint.turns > alarm.turns) {
 
-                response += "${joint.joint}: ${alarm.msg}\n";
-
+                condition = alarm.msg;
                 break;
 
               }
 
             }
             
-            if (response.split("\n").length <= i) {
+            if (condition == "") {
 
-              response += "${joint.joint}: Good Condition\n";
+              condition = "Good Condition";
 
             }
+
+            response += "Joint $i: $condition\n";
 
             i++;
 
@@ -202,6 +208,8 @@ class ChatHelper {
     if (response != ".") {
 
       var rng = Random();
+
+      setState(() => typingUsers.add(robot));
 
       await Future.delayed(Duration(seconds: rng.nextInt(3) + 3));
 

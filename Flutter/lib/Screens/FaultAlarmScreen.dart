@@ -149,20 +149,20 @@ class _FaultAlarmScreenState extends State<FaultAlarmScreen> {
               alarmGraph()
             ];
 
-            for (JointTurns joint in data.turns) {
+            for (Joint joint in data) {
 
               bool alarmed = false;
               int alarmIndex = robot.alarms.length - 1;
 
               for (Alarm alarm in robot.alarms.reversed) {
 
-                print("${joint.turns}, ${alarm.msg} ${alarm.turns}");
+                // print("${joint.turns}, ${alarm.msg} ${alarm.turns}");
 
                 if (alarm.turns < joint.turns && !alarmed) {
 
                   notificationWidgets.add(
                     notificationWidget(
-                      "${alarm.msg}: ${joint.joint}",
+                      "${alarm.msg}: Joint ${joint.jointNo}",
                       alarmColors[alarmIndex]
                     )
                   );

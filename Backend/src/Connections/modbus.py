@@ -12,4 +12,3 @@ def connect_modbus():
         host=os.getenv("MODBUS_HOST"),
         auto_open=True
     )
-

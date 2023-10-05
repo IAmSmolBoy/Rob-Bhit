@@ -1,10 +1,19 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class JointNotifier extends ValueNotifier<Joints> {
+import 'package:flutter/material.dart';
+import 'package:rob_bhit/utils/helper.dart';
+
+class JointNotifier extends ValueNotifier<List<Joint>> {
 
   JointNotifier(super.value);
 
-  void set(Joints newValue) {
+  void set(int i, Joint newValue) {
+
+    super.value[i] = newValue;
+
+  }
+
+  void setList(List<Joint> newValue) {
 
     super.value = newValue;
 
@@ -12,32 +21,43 @@ class JointNotifier extends ValueNotifier<Joints> {
 
 }
 
-class Joints {
+class Joint {
 
-  const Joints(this.angles, this.turns);
+  const Joint(
+    this.angle,
+    this.turns,
+    this.color,
+    this.jointNo
+  );
   
-  final List<Angles> angles;
-  final List<JointTurns> turns;
+  final int jointNo;
+  final double turns, angle;
+  final Color color;
 
-}
+  String toJson() => {
+    "angle": angle,
+    "turns": turns,
+    "color": color,
+    "jointNo": jointNo
+  }.toString();
 
-class Angles {
+  static Joint fromMap(int i, Map<String, dynamic> decodedJson) {
 
-  const Angles(this.joint, this.angle, {
-    this.color
-  });
+    return Joint(
+      decodedJson["angle"] ?? 0.0,
+      decodedJson["turns"] ?? 0.0,
+      jointColors[i],
+      i + 1
+    );
 
-  final String joint;
-  final double angle;
-  final Color? color;
+  }
 
-}
+  static Joint fromJson(int i, String jsonStr) {
 
-class JointTurns {
+    Map<String, dynamic> decodedJson = (json.decode(jsonStr) as Map<String, dynamic>);
 
-  const JointTurns(this.joint, this.turns);
+    return Joint.fromMap(i, decodedJson);
 
-  final String joint;
-  final double turns;
+  }
 
 }
