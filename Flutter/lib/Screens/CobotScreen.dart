@@ -36,29 +36,11 @@ class _CobotScreenState extends State<CobotScreen> {
         valueListenable: joints,
         builder: (BuildContext context, dynamic value, Widget? widget) {
 
-          List<Angles> angles = joints
-            .value
-            .angles;
-          List<JointTurns> turns = joints
-            .value
-            .turns;
+          List<Joint> sortByAngle = joints.value;
+          List<Joint> sortByTurns = joints.value;
 
-          int i = -1;
-
-          angles = angles.map(
-            (angle) {
-
-              i++;
-              return Angles(
-                angle.joint,
-                angle.angle,
-                color: jointColors[i]
-              );
-
-            }
-          ).toList();
-
-          angles.sort((a, b) => (a.angle - b.angle).toInt(),);
+          sortByAngle.sort((a, b) => (a.angle - b.angle).toInt(),);
+          sortByTurns.sort((a, b) => (a.angle - b.angle).toInt(),);
 
           return SingleChildScrollView(
             child: Column(
@@ -83,7 +65,7 @@ class _CobotScreenState extends State<CobotScreen> {
                     overflowMode: LegendItemOverflowMode.wrap
                   ),
                   series: <CircularSeries>[
-                    RadialBarSeries<Angles, String>(
+                    RadialBarSeries<Joint, String>(
                       dataLabelSettings: const DataLabelSettings(
                         isVisible: true,
                       ),
@@ -91,11 +73,11 @@ class _CobotScreenState extends State<CobotScreen> {
                       maximumValue: 360,
                       animationDuration: 0,
                       enableTooltip: true,
-                      dataSource: angles,
+                      dataSource: sortByAngle,
                       innerRadius: "10",
-                      pointColorMapper: (Angles data, _) => data.color,
-                      xValueMapper: (Angles data, _) => data.joint,
-                      yValueMapper: (Angles data, _) => data.angle,
+                      pointColorMapper: (Joint data, _) => data.color,
+                      xValueMapper: (Joint data, _) => "Joint ${data.jointNo}",
+                      yValueMapper: (Joint data, _) => data.angle,
                     )
                   ]
                 ),
@@ -136,15 +118,15 @@ class _CobotScreenState extends State<CobotScreen> {
                     overflowMode: LegendItemOverflowMode.wrap
                   ),
                   series: <CircularSeries>[
-                    PieSeries<JointTurns, String>(
+                    PieSeries<Joint, String>(
                       dataLabelSettings: const DataLabelSettings(isVisible: true,),
                       enableTooltip: true,
-                      dataSource: turns,
+                      dataSource: sortByTurns,
                       animationDuration: 5,
                       animationDelay: 0,
                       dataLabelMapper:(data, _) => "${data.turns.toStringAsFixed(2)} turns",
-                      xValueMapper: (JointTurns data, _) => data.joint,
-                      yValueMapper: (JointTurns data, _) => data.turns,
+                      xValueMapper: (Joint data, _) => "Joint ${data.jointNo}",
+                      yValueMapper: (Joint data, _) => data.turns,
                     )
                   ]
                 ),

@@ -182,6 +182,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
               ),
               SettingsTile.navigation(
+                leading: const Icon(Icons.wifi),
+                title: const Text("Reconnect"),
+                onPressed: 
+                  (context) {
+
+                    String ip = serverIP.value;
+                    serverIP.set("0.0.0.0");
+                    serverIP.set(ip);
+                    
+                  },
+              ),
+              SettingsTile.navigation(
                 leading: const Icon(Icons.exit_to_app),
                 title: const Text("Sign Out"),
                 onPressed: (context) {

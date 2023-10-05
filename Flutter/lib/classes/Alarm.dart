@@ -7,19 +7,22 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
 
   AlarmNotifier(super.value);
 
+  static void updatePrefs(List<RobotAlarms> alarmList) =>
+    prefs.setString("alarms", 
+      json.encode(
+        alarmList.map(
+          (RobotAlarms robotAlarms) =>
+            robotAlarms.tojson()
+        ).toList()
+      )
+    ); 
+
   void addRobot(RobotAlarms newValue) {
 
     super.value
       .add(newValue);
     
-    prefs.setString("alarms", json.encode(
-      super.value
-        .map(
-          (RobotAlarms robotAlarms) =>
-            robotAlarms.tojson()
-        ).toList()
-      )
-    );
+    updatePrefs(super.value);
   
   }
 
@@ -28,14 +31,7 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
     super.value
       .removeAt(index);
     
-    prefs.setString("alarms", json.encode(
-      super.value
-        .map(
-          (RobotAlarms robotAlarms) =>
-            robotAlarms.tojson()
-        ).toList()
-      )
-    );
+    updatePrefs(super.value);
   
   }
 
@@ -44,14 +40,7 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
     super.value[robotIndex]
       .add(newValue);
     
-    prefs.setString("alarms", json.encode(
-      super.value
-        .map(
-          (RobotAlarms robotAlarms) =>
-            robotAlarms.tojson()
-        ).toList()
-      )
-    );
+    updatePrefs(super.value);
   
   }
 
@@ -61,14 +50,7 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
     super.value[robotIndex]
       .remove(alarmIndex);
     
-    prefs.setString("alarms", json.encode(
-      super.value
-        .map(
-          (RobotAlarms robotAlarms) =>
-            robotAlarms.tojson()
-        ).toList()
-      )
-    );
+    updatePrefs(super.value);
   
   }
 
@@ -76,14 +58,7 @@ class AlarmNotifier extends ValueNotifier<List<RobotAlarms>> {
 
     super.value[robotIndex].alarms[alarmIndex] = newValue;
   
-  prefs.setString("alarms", json.encode(
-      super.value
-        .map(
-          (RobotAlarms robotAlarms) =>
-            robotAlarms.tojson()
-        ).toList()
-      )
-      );
+    updatePrefs(super.value);
   
   }
 
