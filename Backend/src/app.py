@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request
 from bson import json_util
 import pymongo
 
-MONGODB_URI = "mongodb://db:27017/example"
+MONGODB_URI = "mongodb://192.168.160.1:27017/"
 # MONGODB_URI = os.environ.get("MONGODB_ENDPOINT")
 
 app = Flask(__name__)

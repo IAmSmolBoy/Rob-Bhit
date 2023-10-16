@@ -1,35 +1,40 @@
-version: '3.9'
+version: '2.4'
 
 services:
 
   db:
     image: mongo:5.0
+    mem_limit: 1024mb
     ports:
       - 27017:27017
     networks:
       - backend
-    env_file: .env
+    # env_file: .env
 
   api:
-    build: ./
+    build: 
+      context: ./
+      dockerfile: Dockerfile
     image: abigteapot/api
+    mem_limit: 1024mb
     ports:
       - 5000:5000
-    volumes:
-      - ./src:/src
     networks:
       - frontend
       - backend
-    env_file: .env
+    # env_file: .env
 
   data-extraction:
-    build: ./data_extraction
+    build: 
+      context: ./data_extraction
+      dockerfile: Dockerfile
     image: abigteapot/data-extraction
+    mem_limit: 1024mb
     volumes:
       - ./data_extraction:/data_extraction
     networks:
       - backend
-    env_file: .env
+    # env_file: .env
 
 networks:
   frontend:

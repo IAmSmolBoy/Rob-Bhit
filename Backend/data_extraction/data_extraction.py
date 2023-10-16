@@ -1,12 +1,13 @@
 import os
 from random import random
+# import sys
 from time import sleep
 import pymongo
 
 from Classes.joints import Joint
 
-MONGODB_URI = os.environ.get("MONGODB_ENDPOINT")
-client = pymongo.MongoClient(MONGODB_URI)
+# MONGODB_URI = os.environ.get("MONGODB_ENDPOINT")
+client = pymongo.MongoClient("mongodb://192.168.160.1:27017/")
 db = client.db
 
 # Collections
@@ -28,6 +29,8 @@ while True:
 
         for i in range(6):
             jointData.append(Joint(0.0, 0.0))
+
+    # print(jointData, file=sys.stderr)
 
     # OmronCobot
     # temp = get_modbus_data()
